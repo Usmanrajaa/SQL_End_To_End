@@ -91,6 +91,15 @@ END
 );
 SELECT * FROM employees;
 
- 
+SELECT * FROM employees
+ORDER BY 
+CASE 
+WHEN department='Sales' THEN 1
+WHEN department='Marketing' THEN 2
+WHEN department='HR' THEN 3
+WHEN department='IT' THEN 4
+ELSE 5
+END;
+
 
 

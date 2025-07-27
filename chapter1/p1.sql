@@ -88,8 +88,8 @@ SELECT * FROM employees
 WHERE department NOT IN ('Sales', 'IT', 'HR');
 
 -- Assuming we add some NULL values
-SELECT * FROM employees WHERE department IS NULL;
-SELECT * FROM employees WHERE department IS NOT NULL;
+SELECT * FROM employees WHERE email IS NULL;
+SELECT * FROM employees WHERE email IS NOT NULL;
 
 SELECT first_name, last_name, salary,
     CASE
