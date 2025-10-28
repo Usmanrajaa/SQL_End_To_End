@@ -10,7 +10,23 @@
 
 -- TABLE LEVEL OPERATION
 -- 1. CREATE TABLE TABLE_NAME(Column_name DATA_TYPE CONSTRAINTS)
--- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME 
+-- EXAMPLES:->  
+-- create table employees_data(
+employee_age tinyint,
+employee_id smallint,
+employee_salary int,
+employee_contact bigint
+);
+
+-- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME (Column_name DATA_TYPE CONSTRAINTS)
+-- EXAMPLES:->
+-- create table if not exists employees_data(
+employee_age tinyint,
+employee_id smallint,
+employee_salary int,
+employee_contact bigint
+);
+
 -- 3. SHOW TABLES
 -- 4. DROP  TABLE TABLE_NAME
 -- 5. RENAME TABLE OLD_TABLE_NAME TO NEW_TABLE_NAME
@@ -18,7 +34,7 @@
 -- 7. TRUNCATE TABLE TABLE_NAME
 -- 8. CREATE TABLE TABLE_NAME_1 LIKE EXISTING_TABLE_NAME
 -- 9. DELETE FROM TABLE_NAME
--- 10. CREATE TABLE TABLE_NAME AS SELECT * FROM TABLE_NAME_2 WHERE salary>50000;
+-- 10. CREATE TABLE TABLE_NAME_1 AS SELECT * FROM TABLE_NAME_2 WHERE salary>50000;
 -- 11. SHOW TABLE STATUS
 -- 12. 
 
