@@ -11,7 +11,8 @@
 -- TABLE LEVEL OPERATION
 -- 1. CREATE TABLE TABLE_NAME(Column_name DATA_TYPE CONSTRAINTS)
 -- EXAMPLES:->  
--- create table employees_data(
+-- create table 
+employees_data(
 employee_age tinyint,
 employee_id smallint,
 employee_salary int,
