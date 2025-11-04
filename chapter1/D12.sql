@@ -47,11 +47,11 @@ employee_contact bigint
 -- 5. ALTER TABLE TABLE_NAME
 -- 5.0 DROP COLUMN COLUMN_NAME
 -- 5.1 ADD C1 data_type constraints, ADD C2 data_type constraints,...    =>(where C1,C2,C3 Are columns name)
--- 5.2 RENAME COLUMNS OLD_COLUMN_NAME TO NEW_COLUMN_NAME
+-- 5.2 RENAME COLUMN OLD_COLUMN_NAME TO NEW_COLUMN_NAME
 -- 5.3 MODIFY COLUMN C2 VARCHAR(N);
 -- 5.4 ADD PRIMARY KEY(C2)
 -- 5.5 ADD CONSTRAINTS constraint_name
--- 5.6 ADD CONSTRAINTS constraints_name UNIQUE(C2)
+-- 5.6 ADD CONSTRAINTS constraints_name(column_name)
 -- 5.7 ADD COLUMN new_column_name first
 -- 5.8 ADD COLUMN new_column_name after any_existing_column_name
 -- 5.9 
