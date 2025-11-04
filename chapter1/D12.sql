@@ -50,10 +50,9 @@ employee_contact bigint
 -- 5.2 RENAME COLUMN OLD_COLUMN_NAME TO NEW_COLUMN_NAME
 -- 5.3 MODIFY COLUMN C2 VARCHAR(N);
 -- 5.4 ADD PRIMARY KEY(C2)
--- 5.5 ADD CONSTRAINTS constraint_name
--- 5.6 ADD CONSTRAINTS constraints_name(column_name)
--- 5.7 ADD COLUMN new_column_name first
--- 5.8 ADD COLUMN new_column_name after any_existing_column_name
+-- 5.5 ADD CONSTRAINTS constraints_name(column_name)
+-- 5.6 ADD COLUMN new_column_name first
+-- 5.7 ADD COLUMN new_column_name after any_existing_column_name
 -- 5.9 
 
 -- ROW LEVEL OPERATION
