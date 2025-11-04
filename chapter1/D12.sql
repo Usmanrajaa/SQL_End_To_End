@@ -69,25 +69,25 @@ employee_contact bigint
 -- 5.  UPDATE SET OF MULTIPLE ROWS COULD BE DONE BY  USING ->CASE
 --    UPDATE TABLE_NAME
 --    SET 
---    CASE=C1
+--    C1=CASE
 --    WHEN CONDITION 1 THEN values1
 --    WHEN CONDITION 1 THEN values2
---    END 
---    CASE=C2
+--    END,
+--    C2=CASE
 --    WHEN CONDITION 1 THEN values
 --    WHEN CONDITION 1 THEN values
---    END
---    CASE=C3
+--    END,
+--    C3=CASE
 --    WHEN CONDITION 1 THEN values
 --    WHEN CONDITION 1 THEN values
---    END
+--    END;
 -- 6. DELETE FROM TABLE 
 --    WHERE ANY_ROW_CONDITION
 -- 7. 
 
 
 
--- OPEARTION -> DDL,DML,DQL,DCL,TQL
+-- OPEARTION -> DDL, DML, DQL, DCL ,TQL
 
 
 -- DATATYPES
