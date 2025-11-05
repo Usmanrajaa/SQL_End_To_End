@@ -104,7 +104,3 @@ SELECT first_name AS "First Name",
        last_name AS "Last Name",
        salary AS "Annual Salary"
 FROM employees;
-
--- Can be used with subqueries
-SELECT * FROM employees
-WHERE employee_id IN (SELECT employee_id FROM managers);
