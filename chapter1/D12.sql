@@ -112,12 +112,12 @@ employee_contact bigint
 
 -- LEVEL 1
 -- 1. CORE CLAUSES
---  SELECT , FROM, WHERE, GROPBY, ORDERBY,HAVING
-
+--  SELECT, FROM, WHERE, ORDERBY
 -- 2. FILTERING TECHNIQUES
---  =,>,<,!=,BETWEEN,IN ,NOT IN, AND, OR,IS NULL,
+--  =,>,<,!=, BETWEEN, IN , NOT IN, AND, OR, IS NULL,
 
 -- 3. DATA SHAPING OPERATIONS
 --  like (%a,a%,%a__,__a%,),limit,distinct,
 
-
+--- 4. Aggregation clauses
+--     GROPBY,,HAVING
