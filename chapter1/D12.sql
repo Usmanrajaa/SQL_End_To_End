@@ -110,7 +110,7 @@ employee_contact bigint
 -- 7. 
 
 
--- LEVEL 1
+-- LEVEL 1 (covered in chapter 2)
 -- 1. CORE CLAUSES
 --  SELECT, FROM, WHERE, ORDERBY
 -- 2. FILTERING TECHNIQUES
@@ -118,6 +118,6 @@ employee_contact bigint
 
 -- 3. DATA SHAPING OPERATIONS
 --  like (%a,a%,%a__,__a%,),limit,distinct,
-
+-- LEVEL 2 (covered in chapter 3)
 --- 4. Aggregation clauses
 --     GROPBY,,HAVING
