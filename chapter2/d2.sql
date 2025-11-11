@@ -73,3 +73,21 @@ WHEN employee_id = 8 THEN 'Teammates on  maternity leave until June'
 WHEN employee_id = 9 THEN 'New hiring in team orientation pending '
 WHEN employee_id = 10 THEN 'Quarterly sales award winner to teams'
 end;
+
+
+ALTER TABLE employees ADD COLUMN category VARCHAR(200);
+set sql_safe_updates=0;
+update employees
+set 
+category=case
+WHEN employee_id = 1 THEN 'ttatt'
+WHEN employee_id = 2 THEN 'aabaa'
+WHEN employee_id = 3 THEN 'aataa'
+WHEN employee_id = 4 THEN null
+WHEN employee_id = 5 THEN 'bob'
+WHEN employee_id = 6 THEN 'bbobb'
+WHEN employee_id = 7 THEN 'mom'
+WHEN employee_id = 8 THEN 'dad'
+WHEN employee_id = 9 THEN 'ada'
+WHEN employee_id = 10 THEN 'bcb'
+end;
