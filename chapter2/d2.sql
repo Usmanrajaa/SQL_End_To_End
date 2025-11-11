@@ -56,3 +56,20 @@ SET
     END;
     
     SET SQL_SAFE_UPDATES=0;
+
+ALTER TABLE employees ADD COLUMN category VARCHAR(200);
+
+update employees
+set 
+category=case
+WHEN employee_id = 1 THEN 'Teammate'
+WHEN employee_id = 2 THEN 'Team leader'
+WHEN employee_id = 3 THEN 'Teams'
+WHEN employee_id = 4 THEN null
+WHEN employee_id = 5 THEN 'System architect for Teams'
+WHEN employee_id = 6 THEN 'Promoted last year'
+WHEN employee_id = 7 THEN 'Teams'
+WHEN employee_id = 8 THEN 'Teammates on  maternity leave until June'
+WHEN employee_id = 9 THEN 'New hiring in team orientation pending '
+WHEN employee_id = 10 THEN 'Quarterly sales award winner to teams'
+end;
