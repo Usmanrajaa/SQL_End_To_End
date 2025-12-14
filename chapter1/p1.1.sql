@@ -25,7 +25,23 @@ INSERT INTO product
 VALUES
 (13,12,46758,44456.78,8957557758596);
 
--- string datatypes
+
+-- 1.Numeric Datatype
+
+CREATE TABLE product(
+product_id TINYINT , -- digit capacity 3
+product_no SMALLINT, -- digit capacity 5
+product_serial INT,  -- digit capacity 10
+product_price DOUBLE(10,2), 
+product_info BIGINT, -- digit capacity 19
+);
+INSERT INTO product
+VALUES
+(13,12,46758,44456.78,8957557758596);
+
+
+-- 2.string datatypes
+
 CREATE TABLE car(
 car_name CHAR(20),
 car_model VARCHAR(50),
@@ -36,7 +52,9 @@ INSERT INTO car
 VALUES
 ('mahindra','2022','world is facing dire backlash in car production','petrol');
 
--- DATE AND TIME
+
+-- 3.DATE AND TIME
+
 CREATE TABLE sales(
 sale_date DATE,
 sale_time TIME,
@@ -47,7 +65,10 @@ INSERT INTO sales
 VALUES
 ('2022-11-12','17:12:24','2022-11-12,17:12:24',NOW());
 SELECT * FROM sales;
--- BOOLEAN
+
+
+-- 4. BOOLEAN
+
 CREATE TABLE verify(
 is_delivered bool,
 is_sold boolean
