@@ -11,8 +11,7 @@
 -- TABLE LEVEL OPERATION
 -- 1. CREATE TABLE TABLE_NAME(Column_name DATA_TYPE CONSTRAINTS)
 -- EXAMPLES:->  
--- create table 
-employees_data(
+create table employees_data(
 employee_age tinyint,
 employee_id smallint,
 employee_salary int,
@@ -21,7 +20,7 @@ employee_contact bigint
 
 -- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME (Column_name DATA_TYPE CONSTRAINTS)
 -- EXAMPLES:->
--- create table if not exists employees_data(
+create table if not exists employees_data(
 employee_age tinyint,
 employee_id smallint,
 employee_salary int,
