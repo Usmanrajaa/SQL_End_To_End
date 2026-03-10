@@ -36,23 +36,24 @@ INSERT INTO car
 VALUES
 ('mahindra','2022','world is facing dire backlash in car production','petrol');
 
--- DATE AND TIME
-CREATE TABLE sales(
-sale_date DATE,
-sale_time TIME,
-purchased_at DATETIME,
-delivered_at TIMESTAMP
-);
-INSERT INTO sales
-VALUES
-('2022-11-12','17:12:24','2022-11-12,17:12:24',NOW());
-SELECT * FROM sales;
--- BOOLEAN
-CREATE TABLE verify(
-is_delivered bool,
-is_sold boolean
-);
-INSERT INTO verify
-VALUES
-(TRUE,FALSE);
-SELECT * FROM verify;
+-- Employees not in these departments
+SELECT * FROM employees
+WHERE department NOT IN ('Sales', 'IT', 'HR');
+
+-- Assuming we add some NULL values
+SELECT * FROM employees WHERE email IS NULL;
+SELECT * FROM employees WHERE email IS NOT NULL;
+
+SELECT first_name, last_name, salary,
+    CASE
+        WHEN salary < 50000 THEN 'Low'
+        WHEN salary BETWEEN 50000 AND 70000 THEN 'Medium'
+        ELSE 'High'
+    END AS salary_level
+FROM employees;
+
+-- Aliases(AS)
+SELECT first_name AS "First Name",
+       last_name AS "Last Name",
+       salary AS "Annual Salary"
+FROM employees;

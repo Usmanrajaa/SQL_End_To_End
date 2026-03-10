@@ -1,4 +1,4 @@
--- DATABASE LEVEL OPERATIONS
+-- **DATABASE LEVEL OPERATIONS**
 -- 1. CREATE DATABASE DB_NAME
 -- 2. SHOW DATABASES
 -- 3. CREATE DB IF NOT EXISTS DB_NAME
@@ -6,36 +6,52 @@
 -- 5. DROP DATABASE DB_NAME
 -- 6. RENAME DATABASE OLD_DB_NAME TO NEW_DB_NAME (POSSIBLE IN OLD VERSION)
 -- 7. SELECT DATABASE()
--- 8.
+-- 8. 
 
 -- TABLE LEVEL OPERATION
--- 1. CREATE TABLE TABLE_NAME(C DATA_TYPE CONSTRAINTS)
--- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME 
+-- 1. CREATE TABLE TABLE_NAME(Column_name DATA_TYPE CONSTRAINTS)
+-- EXAMPLES:->  
+create table employees_data(
+employee_age tinyint,
+employee_id smallint,
+employee_salary int,
+employee_contact bigint
+);
+
+-- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME (Column_name DATA_TYPE CONSTRAINTS)
+-- EXAMPLES:->
+create table if not exists employees_data(
+employee_age tinyint,
+employee_id smallint,
+employee_salary int,
+employee_contact bigint
+);
+
 -- 3. SHOW TABLES
 -- 4. DROP  TABLE TABLE_NAME
 -- 5. RENAME TABLE OLD_TABLE_NAME TO NEW_TABLE_NAME
 -- 6. DESCRIBE TABLE TABLE_NAME
 -- 7. TRUNCATE TABLE TABLE_NAME
--- 8. CREATE TABLE TABLE_NAME_1 LIKE TABLE_NAME_2
+-- 8. CREATE TABLE TABLE_NAME_1 LIKE EXISTING_TABLE_NAME
 -- 9. DELETE FROM TABLE_NAME
--- 10. CREATE TABLE TABLE_NAME AS SELECT * FROM TABLE_NAME_2 WHERE salary>50000;
+--    WHERE CONDITIONS;
+-- 10. CREATE TABLE TABLE_NAME_1 AS SELECT * FROM TABLE_NAME_2 WHERE salary>50000;
 -- 11. SHOW TABLE STATUS
 -- 12. 
 
 -- COLUMN LEVEL OPERATION
 -- 1. SELECT * FROM TABLE_NAME
 -- 2. INSERT INTO TABLE_NAME    VALUES ()
--- 3. SHOW COLUMNS FROM TABLE_NAME
--- 4. DROP COLUMN COLUMN_NAME
+-- 3. SHOW COLUMNS FROM TABLE_NAME 
 -- 5. ALTER TABLE TABLE_NAME
--- 5.1 ADD COLUMN C1 data_type,C2 INT NOT NULL, C3 data_type
--- 5.2 RENAME COLUMNS OLD_COLUMN_NAME TO NEW_COLUMN_NAME
+-- 5.0 DROP COLUMN COLUMN_NAME
+-- 5.1 ADD C1 data_type constraints, ADD C2 data_type constraints,...    =>(where C1,C2,C3 Are columns name)
+-- 5.2 RENAME COLUMN OLD_COLUMN_NAME TO NEW_COLUMN_NAME
 -- 5.3 MODIFY COLUMN C2 VARCHAR(N);
 -- 5.4 ADD PRIMARY KEY(C2)
--- 5.5 ADD CONSTRAINTS constraint_name
--- 5.6 ADD CONSTRAINTS constraints_name UNIQUE(C2)
--- 5.7 ADD COLUMN new_column_name first
--- 5.8 ADD COLUMN new_column_name after any_existing_column_name
+-- 5.5 ADD CONSTRAINTS constraints_name(column_name)
+-- 5.6 ADD COLUMN new_column_name first
+-- 5.7 ADD COLUMN new_column_name after any_existing_column_name
 -- 5.9 
 
 -- ROW LEVEL OPERATION
@@ -52,25 +68,25 @@
 -- 5.  UPDATE SET OF MULTIPLE ROWS COULD BE DONE BY  USING ->CASE
 --    UPDATE TABLE_NAME
 --    SET 
---    CASE=C1
+--    C1=CASE
 --    WHEN CONDITION 1 THEN values1
 --    WHEN CONDITION 1 THEN values2
---    END 
---    CASE=C2
+--    END,
+--    C2=CASE
 --    WHEN CONDITION 1 THEN values
 --    WHEN CONDITION 1 THEN values
---    END
---    CASE=C3
+--    END,
+--    C3=CASE
 --    WHEN CONDITION 1 THEN values
 --    WHEN CONDITION 1 THEN values
---    END
+--    END;
 -- 6. DELETE FROM TABLE 
 --    WHERE ANY_ROW_CONDITION
 -- 7. 
 
 
 
--- OPEARTION -> DDL,DML,DQL,DCL,TQL
+-- OPEARTION -> DDL, DML, DQL, DCL ,TQL
 
 
 -- DATATYPES
@@ -93,14 +109,14 @@
 -- 7. 
 
 
--- LEVEL 1
+-- LEVEL 1 (covered in chapter 2)
 -- 1. CORE CLAUSES
---  SELECT , FROM, WHERE, GROPBY, ORDERBY,HAVING
-
+--  SELECT, FROM, WHERE, ORDERBY
 -- 2. FILTERING TECHNIQUES
---  =,>,<,!=,BETWEEN,IN ,NOT IN, AND, OR,IS NULL,
+--  =,>,<,!=, BETWEEN, IN , NOT IN, AND, OR, IS NULL,
 
 -- 3. DATA SHAPING OPERATIONS
 --  like (%a,a%,%a__,__a%,),limit,distinct,
-
-
+-- LEVEL 2 (covered in chapter 3)
+--- 4. Aggregation clauses
+--     GROPBY,,HAVING
