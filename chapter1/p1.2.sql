@@ -1,90 +1,125 @@
--- DATABASE LEVEL OPERATIONS
--- 1. CREATE DATABASE DB_NAME
--- 2. SHOW DATABASES
--- 3. CREATE DB IF NOT EXISTS DB_NAME
--- 4. USE DB_NAME
--- 5. DROP DATABASE DB_NAME
--- 6. RENAME DATABASE OLD_DB_NAME TO NEW_DB_NAME (POSSIBLE IN OLD VERSION)
--- 7. SELECT DATABASE()
--- 8.
+-- =========================================
+-- COLUMN + ROW LEVEL FULL PRACTICAL SCRIPT
+-- =========================================
 
--- TABLE LEVEL OPERATION
--- 1. CREATE TABLE TABLE_NAME(C DATA_TYPE CONSTRAINTS)
--- 2. CREATE TABLE IF NOT EXISTS TABLE_NAME 
--- 3. SHOW TABLES
--- 4. DROP  TABLE TABLE_NAME
--- 5. RENAME TABLE OLD_TABLE_NAME TO NEW_TABLE_NAME
--- 6. DESCRIBE TABLE TABLE_NAME
--- 7. TRUNCATE TABLE TABLE_NAME
--- 8. CREATE TABLE TABLE_NAME_1 LIKE TABLE_NAME_2
--- 9. DELETE FROM TABLE_NAME
--- 10. CREATE TABLE TABLE_NAME AS SELECT * FROM TABLE_NAME_2 WHERE salary>50000;
--- 11. SHOW TABLE STATUS
--- 12. 
+USE company_db;
 
--- COLUMN LEVEL OPERATION
--- 1. SELECT * FROM TABLE_NAME
--- 2. INSERT INTO TABLE_NAME    VALUES ()
--- 3. SHOW COLUMNS FROM TABLE_NAME
--- 4. DROP COLUMN COLUMN_NAME
--- 5. ALTER TABLE TABLE_NAME
--- 5.1 ADD COLUMN C1 data_type,C2 INT NOT NULL, C3 data_type
--- 5.2 RENAME COLUMNS OLD_COLUMN_NAME TO NEW_COLUMN_NAME
--- 5.3 MODIFY COLUMN C2 VARCHAR(N);
--- 5.4 ADD PRIMARY KEY(C2)
--- 5.5 ADD CONSTRAINTS constraints_name UNIQUE(C2)
--- 5.5 
+-- -----------------------------------------
+-- INITIAL CHECK
+-- -----------------------------------------
+SELECT * FROM employees;
 
--- ROW LEVEL OPERATION
--- 1. INSERT INTO TABLE_NAME 
---    VALUES ()
--- 2. INSER INTO TABLE_NAME(C1,C3,C7)
---    VALUES(A,B,C)
--- 3. UPDATE TABLE_NAME
---    SET C3="A"
---    WHERE CONDITION
--- 4. UPDATE TABLE_NAME
---    SET C3="A",C2="B",C4="Z"
---    WHERE CONDITION
--- 5.  UPDATE SET OF MULTIPLE ROWS COULD BE DONE BY  USING ->CASE
---    UPDATE TABLE_NAME
---    SET 
---    CASE=C1
---    WHEN CONDITION 1 THEN values1
---    WHEN CONDITION 1 THEN values2
---    END 
---    CASE=C2
---    WHEN CONDITION 1 THEN values
---    WHEN CONDITION 1 THEN values
---    END
---    CASE=C3
---    WHEN CONDITION 1 THEN values
---    WHEN CONDITION 1 THEN values
---    END
--- 6. DELETE FROM TABLE 
---    WHERE ANY_ROW_CONDITION
--- 7. 
+-- -----------------------------------------
+-- SHOW COLUMNS
+-- -----------------------------------------
+SHOW COLUMNS FROM employees;
 
+-- -----------------------------------------
+-- ADD COLUMNS (MULTIPLE WITH CONSTRAINTS)
+-- -----------------------------------------
+ALTER TABLE employees
+ADD COLUMN email VARCHAR(100) UNIQUE,
+ADD COLUMN bonus INT DEFAULT 0,
+ADD COLUMN phone BIGINT NOT NULL;
 
+-- -----------------------------------------
+-- ADD COLUMN AT FIRST POSITION
+-- -----------------------------------------
+ALTER TABLE employees
+ADD COLUMN temp_col1 INT FIRST;
 
--- OPEARTION -> DDL,DML,DQL,DCL,TQL
+-- -----------------------------------------
+-- ADD COLUMN AFTER SPECIFIC COLUMN
+-- -----------------------------------------
+ALTER TABLE employees
+ADD COLUMN temp_col2 VARCHAR(50) AFTER department;
 
+-- -----------------------------------------
+-- MODIFY COLUMN
+-- -----------------------------------------
+ALTER TABLE employees
+MODIFY COLUMN salary BIGINT;
 
--- DATATYPES
--- 1. NUMERIC
--- TINYINT, SMALLINT, INT , BIGINT, DECIMAL(M,N)
--- 2. STRING
--- CHAR(N),VARCHAR(N),TEXT,ENUM()
--- 3. TEMPORAL(DATE TIME RELATED)
--- DATE, TIME, DATETIME,  TIMESTAMP
--- 4. BOOLEAN
--- BOOL, BOOLEAN
+-- -----------------------------------------
+-- RENAME COLUMN
+-- -----------------------------------------
+ALTER TABLE employees
+RENAME COLUMN first_name TO fname;
 
--- CONSTRAINTS
--- 1. NOT NULL
--- 2. UNIQUE
--- 3. PRIMARY KEY (NOT NULL+UNIQUE)
--- 4. FOREIGN KEY 
--- 5. DEFAULT
--- 6. AUTO_INCREMENT
--- 7. 
+-- -----------------------------------------
+-- ADD PRIMARY KEY (IF NOT EXISTS DROP FIRST)
+-- -----------------------------------------
+ALTER TABLE employees
+DROP PRIMARY KEY;
+
+ALTER TABLE employees
+ADD PRIMARY KEY(employee_id);
+
+-- -----------------------------------------
+-- ADD CONSTRAINT (UNIQUE)
+-- -----------------------------------------
+ALTER TABLE employees
+ADD CONSTRAINT unique_phone UNIQUE(phone);
+
+-- -----------------------------------------
+-- DROP COLUMN
+-- -----------------------------------------
+ALTER TABLE employees
+DROP COLUMN temp_col1;
+
+-- -----------------------------------------
+-- INSERT FULL ROW
+-- -----------------------------------------
+INSERT INTO employees VALUES
+(101, 'Usman', 'Ansari', 'IT', 60000, '2024-01-01', FALSE, 'usman@gmail.com', 5000, 9876543210, 'test');
+
+-- -----------------------------------------
+-- INSERT SPECIFIC COLUMNS
+-- -----------------------------------------
+INSERT INTO employees (employee_id, fname, department, salary, phone)
+VALUES (102, 'Ali', 'HR', 45000, 9123456789);
+
+-- -----------------------------------------
+-- UPDATE MULTIPLE COLUMNS
+-- -----------------------------------------
+UPDATE employees
+SET salary = 70000,
+    department = 'Finance',
+    bonus = 8000
+WHERE employee_id = 2;
+
+-- -----------------------------------------
+-- UPDATE USING CASE (MULTIPLE ROWS)
+-- -----------------------------------------
+UPDATE employees
+SET 
+salary = CASE
+    WHEN department = 'IT' THEN salary + 10000
+    WHEN department = 'Sales' THEN salary + 5000
+    ELSE salary
+END,
+bonus = CASE
+    WHEN salary > 70000 THEN 10000
+    ELSE 5000
+END,
+is_manager = CASE
+    WHEN salary > 80000 THEN TRUE
+    ELSE FALSE
+END;
+
+-- -----------------------------------------
+-- DELETE SPECIFIC ROW
+-- -----------------------------------------
+DELETE FROM employees
+WHERE employee_id = 102;
+
+-- -----------------------------------------
+-- DELETE WITH CONDITION
+-- -----------------------------------------
+DELETE FROM employees
+WHERE salary < 50000;
+
+-- -----------------------------------------
+-- FINAL CHECK
+-- -----------------------------------------
+SELECT * FROM employees;

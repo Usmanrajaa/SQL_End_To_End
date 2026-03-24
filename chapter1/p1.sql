@@ -1,59 +1,84 @@
-CREATE DATABASE PRACTICE;
-USE PRACTICE;
--- numeric datatypes
-DROP TABLE product;
--- primary_key
--- CREATE TABLE product(
--- product_id TINYINT PRIMARY KEY,
--- product_no SMALLINT,
--- product_serial INT,
--- product_price DOUBLE(10,2),
--- product_info BIGINT
--- );
--- composite  primary key
-CREATE TABLE product(
-product_id TINYINT , -- digit capacity 3
-product_no SMALLINT, -- digit capacity 5
-product_serial INT,  -- digit capacity 10
-product_price DOUBLE(10,2), 
-product_info BIGINT, -- digit capacity 19
-PRIMARY KEY (product_id,product_serial)
-);
-SELECT * FROM product;
-DESCRIBE product;
-INSERT INTO product
-VALUES
-(13,12,46758,44456.78,8957557758596);
+1. CREATE DATABASE company_db;
+-- Create with UTF-8 (IMPORTANT for emojis & multi-language)
+2. CREATE DATABASE app_db
+   CHARACTER SET utf8mb4
+   COLLATE utf8mb4_unicode_ci;
 
--- string datatypes
-CREATE TABLE car(
-car_name CHAR(20),
-car_model VARCHAR(50),
-car_info  TEXT,
-car_category ENUM("electric","dieseal","petrol")
-);
-INSERT INTO car
-VALUES
-('mahindra','2022','world is facing dire backlash in car production','petrol');
 
--- Employees not in these departments
-SELECT * FROM employees
-WHERE department NOT IN ('Sales', 'IT', 'HR');
+utf8mb4 → supports emojis ,hindi/arabic/chinese, 
+utf8 → limited (no full emoji support)
+-- sorting and searching behaviour(collation)
+utf8mb4_unicode_ci -> case insensitive
+utf8mb4_bin -> case sensitive
 
--- Assuming we add some NULL values
-SELECT * FROM employees WHERE email IS NULL;
-SELECT * FROM employees WHERE email IS NOT NULL;
+-- Windows key+. (for emoji panel when inserting any record having emoji in table)
 
-SELECT first_name, last_name, salary,
-    CASE
-        WHEN salary < 50000 THEN 'Low'
-        WHEN salary BETWEEN 50000 AND 70000 THEN 'Medium'
-        ELSE 'High'
-    END AS salary_level
-FROM employees;
 
--- Aliases(AS)
-SELECT first_name AS "First Name",
-       last_name AS "Last Name",
-       salary AS "Annual Salary"
-FROM employees;
+TASK1:
+Create 3 databases:
+CREATE DATABASE test_db1;
+CREATE DATABASE test_db2;
+CREATE DATABASE test_db3;
+Task2:
+Run SHOW DATABASES
+Identify:
+system DBs (mysql, information_schema)
+YOUR DB (test_db1,test_db2,test_db3)
+
+3. CREATE DATABASE IF NOT EXISTS
+ -- Without IF NOT EXISTS
+CREATE DATABASE company_db; -- Error if already exists
+-- Safe Way
+CREATE DATABASE IF NOT EXISTS company_db;
+Task1:
+-- Run twice:
+CREATE DATABASE IF NOT EXISTS safe_db;
+-- Observe: no error
+
+4. -- USE DATABASE
+-- Select Database
+USE company_db;
+-- Now all tables will be created inside this DB
+Task1:
+USE app_db;
+SELECT DATABASE();
+--Output should be:
+app_db
+
+
+5. -- DROP DATABASE
+-- Danger (Deletes everything)
+DROP DATABASE test_db3;
+-- Safe Way
+DROP DATABASE IF EXISTS test_db3;
+
+6. --RENAME DATABASE (IMPORTANT CONCEPT)
+-- Direct rename NOT supported in modern MySQL
+-- Alternative way to rename task
+    Create database sql_pract; -- make table inside it (say T1)
+    CREATE DATABASE new_sql_pract;
+-- Move tables from sql_pract to new_sql_pract
+    RENAME TABLE sql_pract.T1 TO new_sql_pract.T1;
+-- Drop old DB
+    DROP DATABASE sql_pract
+-- now you have T1 table inside new_sql_pract. so without directly renaming database
+-- you made new database and moved all tables to new database from old one 
+
+
+7. -- ALTER DATABASE
+-- Change Character Set
+ALTER DATABASE app_db CHARACTER SET = utf8mb4;
+-- Change Collation
+ALTER DATABASE app_db COLLATE = utf8mb4_unicode_ci;
+-- Practice Task
+ALTER DATABASE test_db1 CHARACTER SET = utf8mb4;
+
+8: -- SHOW DATABASE DETAILS
+SHOW CREATE DATABASE app_db;
+-- Output
+-- charset
+-- collation
+
+
+
+

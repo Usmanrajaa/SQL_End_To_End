@@ -1,0 +1,122 @@
+1.
+CREATE DATABASE IF NOT EXISTS prod_db
+CHARACTER SET utf8mb4
+COLLATE utf8mb4_unicode_ci;
+
+SHOW CREATE DATABASE prod_db;
+
+2. 
+-- Step 1
+CREATE DATABASE new_company;
+
+-- Step 2 (move tables)
+RENAME TABLE old_company.employees TO new_company.employees;
+
+-- Step 3
+DROP DATABASE old_company;
+
+3.
+ALTER DATABASE app_db
+CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+4.
+Expected Answer:
+SELECT DATABASE();
+
+If NULL:
+USE company_db;
+Advanced Debug Flow:
+SHOW DATABASES;
+SHOW TABLES;
+
+5.
+You DON’T just use RENAME TABLE (causes disruption)
+
+-- Strategy:
+Create new DB
+CREATE DATABASE company_db_v2;
+-- Copy schema
+CREATE TABLE company_db_v2.employees LIKE company_db.employees;
+-- Copy data
+INSERT INTO company_db_v2.employees
+SELECT * FROM company_db.employees;
+Sync ongoing changes (critical step)
+Use triggers / binlog replication
+Switch application connection to new DB
+Drop old DB later
+
+6.
+Option 1: Database per tenant
+Pros:
+Isolation
+Security
+Backup per client
+Cons:
+Hard to scale
+Many DB connections
+Option 2: Single DB (Preferred)
+
+company_id INT
+Pros:
+Scalable
+Easier queries
+Centralized management
+Cons:
+Must enforce data isolation
+Best Answer:
+"I choose single DB with company_id, unless strict isolation is required.
+
+
+7.
+Correct Answer (Multi-layer problem)
+
+Problem is NOT just database.
+
+Check all layers:
+Database
+SHOW CREATE DATABASE app_db;
+Table
+SHOW CREATE TABLE employees;
+Column
+SHOW FULL COLUMNS FROM employees;
+Connection (VERY IMPORTANT)
+SET NAMES utf8mb4;
+Final Insight:
+Encoding must match at DB + Table + Column + Client level
+
+8.
+Recovery:
+Restore from backup
+OR use binary logs (binlog) for point-in-time recovery
+
+Example:
+
+mysqlbinlog --start-datetime="2026-03-24 10:00:00" binlog.000001
+
+9.
+Expected Answer:
+Separate databases:
+
+company_dev
+company_test
+company_prod
+Rules:
+
+NEVER mix data
+Restrict production access
+Use different credentials
+Pro Tip:
+"Production DB should not be directly accessible by developers."
+
+10.
+Answer:
+CREATE USER 'app_user'@'localhost' IDENTIFIED BY 'password';
+
+GRANT ALL PRIVILEGES ON company_db.* TO 'app_user'@'localhost';
+
+FLUSH PRIVILEGES;
+Advanced Insight:
+Principle of least privilege
+Never give global access (*.*)
+

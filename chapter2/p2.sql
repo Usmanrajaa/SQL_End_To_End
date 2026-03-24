@@ -1,105 +1,63 @@
-USE sql_pract;
-SHOW TABLES;
-DROP TABLE managers;
+
+-- 1.1 Basic SELECT statements
+-- ----------------------------------------
+-- Select all columns
 SELECT * FROM employees;
 
--- ALTER TABLE employees
--- DROP COLUMN middle_name;
--- DROP COLUMN department_label;
+-- Select specific columns
+SELECT first_name, last_name, salary FROM employees;
 
--- ALTER TABLE employees
--- ADD COLUMN email VARCHAR(50);
--- ADD COLUMN notes VARCHAR(50);
--- ADD COLUMN middle_name VARCHAR(50);
+-- Select with calculated columns
+SELECT first_name, salary, salary * 1.1 AS increased_salary FROM employees;
 
--- UPDATE employees
--- SET 
--- email="abc@gmail.com",
--- notes="it's my personal email",
--- middle_name="xyz"
+-- 1.2 WHERE clause with comparison operators
+-- ----------------------------------------
+-- Equal to
+SELECT * FROM employees WHERE department = 'IT';
 
-SELECT first_name, last_name, salary,
-    CASE
-        WHEN salary < 50000 THEN salary*1.15
-        WHEN salary BETWEEN 50000 AND 70000 THEN salary*1.20
-        ELSE 'High'
-    END AS salary_level
-FROM employees;
+-- Not equal to
+SELECT * FROM employees WHERE department != 'Sales';
+SELECT * FROM employees WHERE department <> 'Sales';
 
-UPDATE employees
-SET 
-incremented_salary=CASE
-WHEN salary < 50000 THEN salary*1.15
-WHEN salary BETWEEN 50000 AND 70000 THEN salary*1.20
-ELSE salary*1.50
-END;
+-- Greater than / Less than
+SELECT * FROM employees WHERE salary > 60000;
+SELECT * FROM employees WHERE salary < 55000;
+SELECT * FROM employees WHERE salary >= 50000;
 
-UPDATE employees
-SET
-email=CASE
-WHEN employee_id=3 THEN "xyz@gmail.com"
-WHEN employee_id=4 THEN "XYC@gmail.com"
-END,
-notes=CASE
-WHEN employee_id=3 THEN "first mail "
-WHEN employee_id=4 THEN "personal mail"
-END ,
-middle_name=CASE
-WHEN employee_id=3 THEN "john"
-WHEN employee_id=4 THEN "rodrigues"
-END;
+-- BETWEEN (inclusive range)
+SELECT * FROM employees WHERE salary BETWEEN 50000 AND 70000;
 
-SET SQL_SAFE_UPDATES=0;
+-- 1.3 Multiple conditions
+-- ----------------------------------------
+-- AND operator
+SELECT * FROM employees 
+WHERE department = 'IT' AND salary > 65000;
 
--- SELECT first_name,last_name,salary,department,;
+-- OR operator
+SELECT * FROM employees 
+WHERE department = 'HR' OR salary > 70000;
 
-ALTER TABLE employees
-ADD COLUMN teams VARCHAR(50);
+-- Combined AND & OR (use parentheses!)
+SELECT * FROM employees 
+WHERE (department = 'IT' OR department = 'HR') 
+  AND salary > 60000;
 
--- method1
-UPDATE employees
-SET
-teams=CASE
-WHEN department="Sales" THEN "TEAM-A"
-WHEN department="Marketing" THEN "TEAM-B"
-WHEN department="IT" THEN "TEAM-C"
-WHEN department="HR" THEN "TEAM-D"
-END ;
+-- 1.4 IN and NOT IN operators
+-- ----------------------------------------
+-- IN (list of values)
+SELECT * FROM employees 
+WHERE department IN ('IT', 'HR', 'Sales');
 
--- method2
-UPDATE employees
-SET
-teams=CASE department
-WHEN "Sales" THEN "TEAM-A"
-WHEN "Marketing" THEN "TEAM-B"
-WHEN "IT" THEN "TEAM-C"
-WHEN "HR" THEN "TEAM-D"
-END ;
+-- NOT IN
+SELECT * FROM employees 
+WHERE department NOT IN ('Sales', 'Marketing');
 
-ALTER TABLE employees
-ADD COLUMN incremented_salary INT;
+-- 1.5 NULL handling
+-- ----------------------------------------
+-- IS NULL
+SELECT * FROM employees 
+WHERE middle_name IS NULL;
 
--- inplace replcacement
-UPDATE employees
-SET
-salary=salary*(
-CASE 
-WHEN salary < 50000 THEN 1.15
-WHEN salary BETWEEN 50000 AND 70000 THEN 1.20
-ELSE 1.50
-END
-);
-SELECT * FROM employees;
-
-SELECT * FROM employees
-ORDER BY 
-CASE 
-WHEN department='Sales' THEN 1
-WHEN department='Marketing' THEN 2
-WHEN department='HR' THEN 3
-WHEN department='IT' THEN 4
-ELSE 5
-END;
-
-
-
+-- IS NOT NULL
+SELECT * FROM employees 
+WHERE email IS NOT NULL;

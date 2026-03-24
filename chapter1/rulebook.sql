@@ -1,12 +1,20 @@
 -- **DATABASE LEVEL OPERATIONS**
+-- "At database level, I focus on safety (IF EXISTS), encoding (utf8mb4), 
+-- isolation, backups, and always verifying context before execution."
+
+
 -- 1. CREATE DATABASE DB_NAME
+-- 2. CREATE DATABASE app_db 
+--    CHARACTER SET utf8mb4 
+--    COLLATE utf8mb4_unicode_ci;
 -- 2. SHOW DATABASES
 -- 3. CREATE DB IF NOT EXISTS DB_NAME
 -- 4. USE DB_NAME
 -- 5. DROP DATABASE DB_NAME
 -- 6. RENAME DATABASE OLD_DB_NAME TO NEW_DB_NAME (POSSIBLE IN OLD VERSION)
 -- 7. SELECT DATABASE()
--- 8. 
+-- 8.
+ 
 
 -- TABLE LEVEL OPERATION
 -- 1. CREATE TABLE TABLE_NAME(Column_name DATA_TYPE CONSTRAINTS)
@@ -108,15 +116,3 @@ employee_contact bigint
 -- 6. AUTO_INCREMENT
 -- 7. 
 
-
--- LEVEL 1 (covered in chapter 2)
--- 1. CORE CLAUSES
---  SELECT, FROM, WHERE, ORDERBY
--- 2. FILTERING TECHNIQUES
---  =,>,<,!=, BETWEEN, IN , NOT IN, AND, OR, IS NULL,
-
--- 3. DATA SHAPING OPERATIONS
---  like (%a,a%,%a__,__a%,),limit,distinct,
--- LEVEL 2 (covered in chapter 3)
---- 4. Aggregation clauses
---     GROPBY,,HAVING
