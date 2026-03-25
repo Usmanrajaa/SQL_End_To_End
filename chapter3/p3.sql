@@ -16,6 +16,11 @@ FROM employees;
 SELECT COUNT(DISTINCT department) AS unique_departments 
 FROM employees;
 
+-- *** count number of columns
+SELECT COUNT(*) AS column_count
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE table_schema = "database_name" AND table_name = "table_name";
+
 -- 1.2 SUM - Sum of values
 -- ----------------------------------------
 -- Total salary expense
