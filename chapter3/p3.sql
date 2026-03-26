@@ -21,6 +21,11 @@ SELECT COUNT(*) AS column_count
 FROM INFORMATION_SCHEMA.COLUMNS
 WHERE table_schema = "database_name" AND table_name = "table_name";
 
+-- Q1. give total number of hirings for sales team between 1st jan 2020 to 1st jan 2022
+select count(case when department="Sales" then 1 end) as total
+from employees
+where hire_date between'2020-01-01' and '2022-01-01';
+
 -- 1.2 SUM - Sum of values
 -- ----------------------------------------
 -- Total salary expense
@@ -31,6 +36,27 @@ FROM employees;
 SELECT SUM(salary) AS it_salary_total 
 FROM employees 
 WHERE department = 'IT';
+
+-- Q2 -> Fund distribution->
+-- for sales employees give 100000 and for hr employees give 70000 and then tell me from employees table what 
+-- total expenditure is going for (sales+hr) department.
+-- Q2.1 -> say company budget is 1000000 then what is remaining after distributing to sales+hr employees.
+
+select sum(
+case department
+when "Sales" then 100000
+when "HR" then 70000
+end) as total
+from employees;
+
+
+select 1000000-sum(
+case department
+when "Sales" then 100000
+when "HR" then 70000
+end) as total
+from employees;
+
 
 -- 1.3 AVG - Average of values
 -- ----------------------------------------
@@ -81,6 +107,18 @@ SELECT
     COUNT(*) AS employee_count
 FROM employees
 GROUP BY department;
+
+
+
+-- Q3. for the department categorize between high(>65000),medium(>40000) ,low (<40000) then 
+--      calculate 1. total employees , 2. % of high earners
+
+select 
+sum(case when salary>85000 then 1 else 0 end) as high_salary_count,
+sum(case when salary between 75000 and 85000 then 1 else 0 end) as medium_salary,
+sum(case when salary<75000 then 1 else 0 end) as low_salary,
+(100*sum(case when salary>85000 then 1 else 0 end)/count(*)) as percentage_high_earners
+from employees;
 
 -- 2.2 Multiple aggregates with GROUP BY
 -- ----------------------------------------
