@@ -1,73 +1,64 @@
--- =========================================================
--- LEVEL 1: VIEWS FUNDAMENTALS
--- =========================================================
+LEVEL 1: VIEWS FUNDAMENTALS – QUESTIONS & SOLUTIONS
+Q1: What is a view, and does it store data physically?
+A view is a virtual table based on a SELECT query. It does not store data physically (except materialized views). It acts as a stored query that can be queried like a table.
 
--- 1.1 What is a View?
--- A view is a virtual table based on a SELECT query
--- It doesn't store data physically (except materialized views)
--- Acts as a stored query that can be queried like a table
+Q2: List at least 3 benefits of using views.
 
--- 1.2 View Syntax Structure
-/*
-CREATE [OR REPLACE] VIEW view_name AS
-SELECT columns
-FROM tables
-WHERE conditions
-[WITH CHECK OPTION];
-*/
+Security: Hide sensitive columns
 
--- 1.3 Types of Views
-/*
-1. Simple Views - Based on single table, no functions/aggregations
-2. Complex Views - Based on multiple tables, JOINs, functions
-3. Updatable Views - Can perform INSERT/UPDATE/DELETE
-4. Read-Only Views - Complex views that can't be updated
-5. Materialized Views - Physically stored (PostgreSQL, Oracle)
-*/
+Simplicity: Complex queries become simple
 
--- 1.4 View Security & Benefits
-/*
-Benefits:
-- Security: Hide sensitive columns
-- Simplicity: Complex queries become simple
-- Consistency: Standardize business logic
-- Performance: Pre-defined optimized queries
-- Data Integrity: Controlled data access
-*/
+Consistency: Standardize business logic
 
--- 1.5 View Limitations
-/*
-- Performance: Each query executes the view's SELECT
-- No indexing (except materialized views)
-- Nested views can be slow
-- Some views are read-only
-- ORDER BY in view may be ignored (depends on DB)
-*/
+Performance: Pre-defined optimized queries
 
+Data integrity: Controlled data access
 
--- =========================================================
--- LEVEL 2: CREATE VIEW (With Your Dataset)
--- =========================================================
+Q3: Name 2 limitations or downsides of using views.
 
--- 2.1 Basic View Creation
--- Create a view for active sales employees (from your code)
+Performance: Each query executes the view's SELECT
+
+No indexing (except materialized views)
+
+Nested views can be slow
+
+Some views are read-only
+
+ORDER BY in view may be ignored (depends on DB)
+
+Q4: What are the 5 types of views mentioned in the tutorial?
+
+Simple Views – single table, no functions/aggregations
+
+Complex Views – multiple tables, JOINs, functions
+
+Updatable Views – can perform INSERT/UPDATE/DELETE
+
+Read-Only Views – complex views that can't be updated
+
+Materialized Views – physically stored (PostgreSQL, Oracle)
+
+Q5: What does WITH CHECK OPTION do when creating a view?
+It prevents inserts or updates that would cause the row to disappear from the view.
+
+LEVEL 2: CREATE VIEW – QUESTIONS & SOLUTIONS (Based on Your Dataset)
+Q6: Write the SQL to create a view called active_sales_employees that shows employee_id, first_name, last_name, and salary for employees in department 10 who are not managers.
+
+sql
 CREATE VIEW active_sales_employees AS
 SELECT e.employee_id, e.first_name, e.last_name, e.salary
 FROM employees e
 WHERE e.dept_id = 10 AND e.is_manager = FALSE;
+Q7: How would you create a view public_employee_info that hides sensitive columns and only shows non‑manager employees?
 
--- Query the view (works like a table)
-SELECT * FROM active_sales_employees;
-
--- 2.2 View with Specific Columns
--- Hide sensitive information
+sql
 CREATE VIEW public_employee_info AS
 SELECT employee_id, first_name, last_name, department
 FROM employees
 WHERE is_manager = FALSE;
+Q8: Create a view high_value_orders that displays orders where the total value (quantity * unit_price) exceeds 1000.
 
--- 2.3 View with WHERE Clause
--- Show only high-value orders
+sql
 CREATE VIEW high_value_orders AS
 SELECT order_id, customer_name, order_date, status
 FROM orders
@@ -76,11 +67,9 @@ WHERE order_id IN (
     FROM order_details 
     WHERE quantity * unit_price > 1000
 );
+Q9: Write a view order_summary that joins orders, employees, and order_details, showing order_id, customer_name, order_date, sales rep full name, order total, and status.
 
--- Test the view
-SELECT * FROM high_value_orders;
-
--- 2.4 View with JOINs (From your code)
+sql
 CREATE VIEW order_summary AS
 SELECT
     o.order_id,
@@ -93,12 +82,9 @@ FROM orders o
 JOIN employees e ON o.employee_id = e.employee_id
 JOIN order_details od ON o.order_id = od.order_id
 GROUP BY o.order_id, o.customer_name, o.order_date, e.first_name, e.last_name, o.status;
+Q10: Create a view product_sales_summary that aggregates product_id, product_name, category, times ordered, total quantity sold, total revenue, average selling price, max price, and min price.
 
--- Query the view
-SELECT * FROM order_summary WHERE order_total > 500;
-
--- 2.5 View with Aggregations
--- Product sales summary view
+sql
 CREATE VIEW product_sales_summary AS
 SELECT 
     p.product_id,
@@ -113,12 +99,9 @@ SELECT
 FROM products p
 LEFT JOIN order_details od ON p.product_id = od.product_id
 GROUP BY p.product_id, p.product_name, p.category;
+Q11: Write a view premium_products that shows products with a price above the company average, including the average price and the difference.
 
--- Query the summary
-SELECT * FROM product_sales_summary ORDER BY total_revenue DESC;
-
--- 2.6 View with Subqueries
--- View showing products above average price
+sql
 CREATE VIEW premium_products AS
 SELECT 
     product_name,
@@ -128,12 +111,9 @@ SELECT
     price - (SELECT AVG(price) FROM products) AS price_difference
 FROM products
 WHERE price > (SELECT AVG(price) FROM products);
+Q12: Create an employee_performance view with calculated columns: total orders handled, total sales value, sales‑to‑salary ratio, and a performance rating (High Performer / Active / Inactive).
 
--- Check premium products
-SELECT * FROM premium_products;
-
--- 2.7 View with Calculated Columns
--- Employee performance view
+sql
 CREATE VIEW employee_performance AS
 SELECT 
     e.employee_id,
@@ -152,11 +132,9 @@ FROM employees e
 LEFT JOIN orders o ON e.employee_id = o.employee_id
 LEFT JOIN order_details od ON o.order_id = od.order_id
 GROUP BY e.employee_id, e.first_name, e.last_name, e.salary;
+Q13: Write a view inventory_status that uses CASE to label stock status as Out of Stock, Low Stock, Normal Stock, or Overstocked.
 
--- View employee performance
-SELECT * FROM employee_performance ORDER BY total_sales_value DESC;
-
--- 2.8 View with Aliases
+sql
 CREATE VIEW inventory_status AS
 SELECT 
     p.product_id AS id,
@@ -170,46 +148,33 @@ SELECT
         ELSE 'Overstocked'
     END AS stock_status
 FROM products p;
+LEVEL 3: MODIFY VIEWS – QUESTIONS & SOLUTIONS
+Q14: How do you update an existing view without dropping it? Provide an example that adds the email column to active_sales_employees.
 
-
--- =========================================================
--- LEVEL 3: MODIFY VIEWS
--- =========================================================
-
--- 3.1 CREATE OR REPLACE VIEW
--- Update the sales employees view to include email (from your code)
+sql
 CREATE OR REPLACE VIEW active_sales_employees AS
 SELECT e.employee_id, e.first_name, e.last_name, e.salary, e.email
 FROM employees e
 WHERE e.dept_id = 10 AND e.is_manager = FALSE;
+Q15: Write the SQL to rename the view active_sales_employees to active_sales_team (PostgreSQL syntax).
 
--- 3.2 ALTER VIEW (Rename, Set Options)
--- Rename a view (PostgreSQL)
+sql
 ALTER VIEW active_sales_employees RENAME TO active_sales_team;
+Q16: How do you safely drop a view if it exists?
 
--- Or in MySQL: RENAME TABLE active_sales_employees TO active_sales_team;
-
--- Set view options (PostgreSQL)
-ALTER VIEW active_sales_team SET (security_invoker = true);
-
--- 3.3 DROP VIEW
--- Drop a view if no longer needed (from your code)
+sql
 DROP VIEW IF EXISTS old_sales_report;
+Q17: What is a temporary view, and how do you create one that shows orders from the last 7 days?
+A temporary view exists only for the current session.
 
--- Drop multiple views
-DROP VIEW IF EXISTS view1, view2, view3 CASCADE;
-
--- 3.4 Temporary Views
--- View that exists only for the session
+sql
 CREATE TEMPORARY VIEW temp_recent_orders AS
 SELECT * FROM orders 
 WHERE order_date >= CURRENT_DATE - INTERVAL '7 days';
+Q18: What is a materialized view? Write the SQL to create one called mv_product_sales that stores product sales aggregations.
+A materialized view is physically stored for better performance.
 
--- Use temp view
-SELECT * FROM temp_recent_orders;
-
--- 3.5 Materialized Views (PostgreSQL)
--- Physically stored view for better performance
+sql
 CREATE MATERIALIZED VIEW mv_product_sales AS
 SELECT 
     p.product_name,
@@ -219,20 +184,14 @@ SELECT
 FROM products p
 JOIN order_details od ON p.product_id = od.product_id
 GROUP BY p.product_id, p.product_name, p.category;
+Q19: How do you refresh a materialized view?
 
--- Refresh materialized view
+sql
 REFRESH MATERIALIZED VIEW mv_product_sales;
+LEVEL 4: VIEW WITH JOINS & COMPLEX QUERIES – QUESTIONS & SOLUTIONS
+Q20: Create a view complete_order_details that uses multiple JOINs to show: order ID, customer name, order date, order status, sales rep first/last name, product name, category, quantity, unit price, line total, and order total (window function).
 
--- Drop materialized view
-DROP MATERIALIZED VIEW IF EXISTS mv_product_sales;
-
-
--- =========================================================
--- LEVEL 4: VIEW WITH JOINS & COMPLEX QUERIES
--- =========================================================
-
--- 4.1 View with Multiple JOINs
--- Complete order details view
+sql
 CREATE VIEW complete_order_details AS
 SELECT 
     o.order_id,
@@ -251,12 +210,9 @@ FROM orders o
 JOIN employees e ON o.employee_id = e.employee_id
 JOIN order_details od ON o.order_id = od.order_id
 JOIN products p ON od.product_id = p.product_id;
+Q21: Write a view product_order_status using a LEFT JOIN to show all products, even those never ordered, with a column order_status that says Never Ordered, Ordered but Zero Quantity, or Has Orders.
 
--- Query the comprehensive view
-SELECT * FROM complete_order_details WHERE order_total > 500;
-
--- 4.2 View with LEFT/RIGHT JOINs
--- Show all products, even those never ordered
+sql
 CREATE VIEW product_order_status AS
 SELECT 
     p.product_id,
@@ -272,9 +228,9 @@ SELECT
 FROM products p
 LEFT JOIN order_details od ON p.product_id = od.product_id
 GROUP BY p.product_id, p.product_name, p.category, p.price;
+Q22: Assuming an employees table has a manager_id, create a view employee_hierarchy that shows each employee’s name, whether they are a manager, their manager’s name, and a hierarchy level.
 
--- 4.3 View with Self Join
--- Employee hierarchy view (if manager_id exists)
+sql
 CREATE VIEW employee_hierarchy AS
 SELECT 
     e1.employee_id,
@@ -288,9 +244,9 @@ SELECT
     END AS hierarchy_level
 FROM employees e1
 LEFT JOIN employees e2 ON e1.manager_id = e2.employee_id;
+Q23: Write a view all_products_status using UNION to show active products (stock > 0) labeled Active and out‑of‑stock products labeled Out of Stock.
 
--- 4.4 View with UNION
--- Combined active and inactive products view
+sql
 CREATE VIEW all_products_status AS
 SELECT 
     product_name,
@@ -309,9 +265,9 @@ SELECT
     'Out of Stock' AS status
 FROM products
 WHERE stock_quantity = 0;
+Q24: What is a nested view? Show an example that builds high_value_product_sales on top of product_sales_summary.
 
--- 4.5 Nested Views (View on View)
--- Build upon existing view
+sql
 CREATE VIEW high_value_product_sales AS
 SELECT 
     product_name,
@@ -320,8 +276,9 @@ SELECT
     avg_selling_price
 FROM product_sales_summary
 WHERE total_revenue > 500;
+Q25: Create a view employee_rankings that uses window functions to show rank within department, company‑wide dense rank, and percentage of total payroll.
 
--- 4.6 View with Window Functions
+sql
 CREATE VIEW employee_rankings AS
 SELECT 
     e.first_name,
@@ -332,389 +289,218 @@ SELECT
     DENSE_RANK() OVER (ORDER BY e.salary DESC) AS company_rank,
     ROUND(100.0 * e.salary / SUM(e.salary) OVER (), 2) AS pct_of_payroll
 FROM employees e;
+LEVEL 5: UPDATABLE VIEWS – QUESTIONS & SOLUTIONS
+Q26: What makes a simple view updatable? Provide an example active_products based on a single table.
+A simple view on a single table without aggregations, DISTINCT, window functions, or JOINs is updatable.
 
-
--- =========================================================
--- LEVEL 5: UPDATABLE VIEWS
--- =========================================================
-
--- 5.1 Simple Updatable Views
--- View on single table (updatable)
+sql
 CREATE VIEW active_products AS
 SELECT product_id, product_name, price, stock_quantity
 FROM products
 WHERE stock_quantity > 0;
+Q27: Show how to insert a new product through the active_products view.
 
--- 5.2 INSERT through View
--- Insert new product through view
+sql
 INSERT INTO active_products (product_name, price, stock_quantity)
 VALUES ('New Tablet', 399.99, 50);
+Q28: Update the price of a product through the view.
 
--- Verify insertion
-SELECT * FROM active_products WHERE product_name = 'New Tablet';
-SELECT * FROM products WHERE product_name = 'New Tablet';
-
--- 5.3 UPDATE through View
--- Update price through view
+sql
 UPDATE active_products 
 SET price = 379.99 
 WHERE product_name = 'New Tablet';
+Q29: Delete a product through the view.
 
--- 5.4 DELETE through View
--- Delete through view (only if view is updatable)
+sql
 DELETE FROM active_products 
 WHERE product_name = 'New Tablet';
+Q30: What does WITH CHECK OPTION prevent? Write a view high_value_products with CHECK OPTION and explain why inserting a product with price 50 would fail.
+It prevents inserts/updates that would make the row disappear from the view.
 
--- 5.5 View with CHECK OPTION
--- Prevent inserts/updates that would make row disappear from view
+sql
 CREATE VIEW high_value_products AS
 SELECT product_id, product_name, price, stock_quantity
 FROM products
 WHERE price > 100
 WITH CHECK OPTION;
+Inserting price 50 would fail because the new row would not satisfy price > 100 and would vanish from the view.
 
--- This will FAIL because price 50 would make row disappear
--- INSERT INTO high_value_products (product_name, price, stock_quantity)
--- VALUES ('Cheap Item', 50, 100);  -- ERROR!
+Q31: Explain the difference between LOCAL CHECK OPTION and CASCADED CHECK OPTION.
 
--- This works
-INSERT INTO high_value_products (product_name, price, stock_quantity)
-VALUES ('Premium Item', 299.99, 30);
+LOCAL CHECK OPTION: only checks the condition of this view.
 
--- 5.6 Local vs Cascaded Check Option
--- LOCAL CHECK: Only checks this view's condition
--- CASCADED CHECK: Checks this and all underlying views
-CREATE VIEW expensive_electronics AS
-SELECT product_id, product_name, category, price
-FROM high_value_products
-WHERE category = 'Electronics'
-WITH CASCADED CHECK OPTION;
+CASCADED CHECK OPTION: checks this view's condition and all underlying views' conditions.
 
--- 5.7 Non-Updatable Views (When and Why)
--- Views with these features are NOT updatable:
--- - JOINs (multiple tables)
--- - Aggregations (GROUP BY, SUM, COUNT)
--- - DISTINCT
--- - Window functions
--- - Subqueries in SELECT
--- - UNION/INTERSECT/EXCEPT
+Q32: List at least 4 features that make a view non‑updatable. Why does INSERT fail on order_product_view?
+Features: JOINs, aggregations (GROUP BY, SUM), DISTINCT, window functions, subqueries in SELECT, UNION.
+INSERT fails because the view joins multiple tables – there is no way to map the insert to a single underlying table.
 
--- Example: Non-updatable view (JOIN)
-CREATE VIEW order_product_view AS
-SELECT o.order_id, p.product_name
-FROM orders o
-JOIN order_details od ON o.order_id = od.order_id
-JOIN products p ON od.product_id = p.product_id;
+LEVEL 6: INDEXES FUNDAMENTALS – QUESTIONS & SOLUTIONS
+Q33: What is an index, and how does it improve query speed?
+An index is a data structure (like a book's index) that allows the database to quickly locate rows without scanning the entire table.
 
--- This INSERT will FAIL (multiple tables)
--- INSERT INTO order_product_view VALUES (999, 'New Product');  -- ERROR!
+Q34: Name 5 types of indexes mentioned.
 
+B-Tree Index
 
--- =========================================================
--- LEVEL 6: INDEXES FUNDAMENTALS
--- =========================================================
+Hash Index
 
--- 6.1 What is an Index?
--- An index is a data structure that improves query speed
--- Similar to a book's index - quickly locates data without scanning everything
+GiST/GIN (full-text)
 
--- 6.2 Index Types Overview
-/*
-1. B-Tree Index - Default, good for equality and range queries
-2. Hash Index - Only equality, very fast for exact matches
-3. GiST/GIN - Full-text search, geometric data
-4. Bitmap Index - For low-cardinality columns
-5. Unique Index - Enforces uniqueness
-6. Composite Index - Multiple columns
-7. Partial Index - Subset of rows
-8. Expression Index - Based on function results
-*/
+Bitmap Index
 
--- 6.3 How Indexes Work (B-Tree)
--- Structure: Root → Branches → Leaves (sorted)
--- Search complexity: O(log n) vs full table scan O(n)
+Unique Index
 
--- 6.4 Index Benefits & Costs
-/*
-Benefits:
-- Faster SELECT queries
-- Enforce uniqueness
-- Faster JOIN operations
-- Faster ORDER BY and GROUP BY
-- Covering indexes (index-only scans)
+Composite Index
 
-Costs:
-- Slower INSERT/UPDATE/DELETE
-- Extra disk space (up to 2-3x table size)
-- Index maintenance overhead
-*/
+Partial Index
 
--- 6.5 When to Use/Not Use Indexes
-/*
-USE indexes when:
-- Columns in WHERE clause frequently
-- Columns used for JOINs
-- Columns used for ORDER BY / GROUP BY
-- High cardinality columns (many unique values)
-- Large tables (>10,000 rows)
+Expression Index
 
-DON'T use indexes when:
-- Small tables (<100 rows)
-- Low cardinality columns (e.g., gender)
-- Frequently updated tables
-- Columns rarely used in queries
-- Most queries are INSERT/UPDATE/DELETE
-*/
+Q35: How does a B‑Tree index achieve O(log n) search complexity?
+It organizes data in a tree structure (root → branches → leaves). The height grows logarithmically with the number of rows.
 
--- =========================================================
--- LEVEL 7: CREATE INDEX (With Your Dataset)
--- =========================================================
+Q36: List 3 benefits and 3 costs of using indexes.
+Benefits: faster SELECT, uniqueness enforcement, faster JOIN/ORDER BY/GROUP BY, covering indexes.
+Costs: slower INSERT/UPDATE/DELETE, extra disk space (2-3x table size), maintenance overhead.
 
--- 7.1 Single-Column Index
--- Index on frequently searched column
+Q37: When should you avoid creating an index?
+
+Small tables (<100 rows)
+
+Low cardinality columns (e.g., gender)
+
+Frequently updated tables
+
+Columns rarely used in WHERE/JOIN/ORDER BY
+
+When most queries are INSERT/UPDATE/DELETE
+
+LEVEL 7: CREATE INDEX – QUESTIONS & SOLUTIONS
+Q38: Write the SQL to create a single‑column index on product_name in the products table.
+
+sql
 CREATE INDEX idx_product_name ON products(product_name);
+Q39: Create a composite index on employees(last_name, first_name). Which queries can use it?
 
--- Now this query will use the index
-SELECT * FROM products WHERE product_name = 'Laptop Pro';
-
--- 7.2 Composite/Multi-Column Index
--- Index on multiple columns for combined searches
+sql
 CREATE INDEX idx_employee_name ON employees(last_name, first_name);
+It can be used for:
 
--- This query can use the index
-SELECT * FROM employees 
-WHERE last_name = 'Smith' AND first_name = 'John';
+WHERE last_name = 'Smith' AND first_name = 'John'
 
--- Also works for just last_name (leftmost prefix)
-SELECT * FROM employees WHERE last_name = 'Smith';
+WHERE last_name = 'Smith' (leftmost prefix)
+It cannot be used efficiently for WHERE first_name = 'John' alone.
 
--- But NOT for just first_name (index can't be used)
-SELECT * FROM employees WHERE first_name = 'John';  -- Won't use index efficiently
+Q40: Create a unique index on product_name to prevent duplicates.
 
--- 7.3 Unique Index
--- Ensure no duplicate product names (from your code)
+sql
 CREATE UNIQUE INDEX idx_product_name ON products(product_name);
+Q41: What is a partial index? Write one on products that indexes only rows where stock_quantity > 0.
 
--- This would now fail if duplicate product name inserted
--- INSERT INTO products (product_name) VALUES ('Laptop Pro');  -- ERROR!
-
--- 7.4 Full-Text Index (PostgreSQL/MySQL)
--- For searching text within columns
--- PostgreSQL
-CREATE INDEX idx_product_description ON products USING GIN(to_tsvector('english', description));
-
--- MySQL
--- CREATE FULLTEXT INDEX idx_product_fulltext ON products(product_name, category);
-
--- 7.5 Partial Index (WHERE clause)
--- Index only on in-stock products
+sql
 CREATE INDEX idx_active_products ON products(product_name)
 WHERE stock_quantity > 0;
+Q42: Create an expression index on LOWER(last_name) to speed up case‑insensitive searches.
 
--- This query uses the partial index
-SELECT * FROM products WHERE stock_quantity > 0 AND product_name = 'Laptop Pro';
-
--- This query won't use it (different WHERE condition)
-SELECT * FROM products WHERE stock_quantity = 0 AND product_name = 'Laptop Pro';
-
--- 7.6 Expression Index (Function-based)
--- Index on lowercase name for case-insensitive search
+sql
 CREATE INDEX idx_employee_lower_name ON employees(LOWER(last_name));
+Q43: Write a descending index on price in the products table.
 
--- This query can now use the index
-SELECT * FROM employees WHERE LOWER(last_name) = 'smith';
-
--- 7.7 Descending Index
--- For queries ordering by DESC
+sql
 CREATE INDEX idx_product_price_desc ON products(price DESC);
+Q44: What is a covering index? Create one on orders(order_date) INCLUDE (customer_name, status) (PostgreSQL).
+A covering index includes extra columns so that the query can be satisfied entirely from the index without accessing the table.
 
--- Optimized for descending order
-SELECT * FROM products ORDER BY price DESC;
-
--- 7.8 Covering Index (INCLUDE columns) - PostgreSQL
--- Index that includes extra columns for index-only scans
+sql
 CREATE INDEX idx_orders_covering ON orders(order_date) INCLUDE (customer_name, status);
+LEVEL 8: INDEX MANAGEMENT – QUESTIONS & SOLUTIONS
+Q45: How do you list all indexes on the employees table in PostgreSQL?
 
--- This query can be satisfied entirely from index (no table access)
-SELECT customer_name, status FROM orders WHERE order_date >= '2023-06-01';
-
-
--- =========================================================
--- LEVEL 8: INDEX MANAGEMENT
--- =========================================================
-
--- 8.1 View Indexes
--- Show all indexes on a table (PostgreSQL)
+sql
 SELECT indexname, indexdef
 FROM pg_indexes
 WHERE tablename = 'employees';
+Q46: Write the SQL to drop an index named idx_old_product_name.
 
--- Show indexes with details (MySQL)
--- SHOW INDEX FROM employees;
-
--- 8.2 Drop Index
--- Remove an existing index (from your code)
+sql
 DROP INDEX IF EXISTS idx_old_product_name;
+Q47: Rebuild an index named idx_product_name (PostgreSQL).
 
--- Drop multiple indexes
-DROP INDEX IF EXISTS idx1, idx2, idx3;
-
--- 8.3 Rebuild/Reindex Index
--- Rebuild index to remove fragmentation (PostgreSQL)
+sql
 REINDEX INDEX idx_product_name;
+Q48: Rename an index from idx_product_name to idx_products_product_name.
 
--- Rebuild all indexes on a table
-REINDEX TABLE products;
-
--- 8.4 Disable/Enable Index (PostgreSQL)
--- Disable index (only for testing)
--- UPDATE pg_index SET indisready = false WHERE indexrelid = 'idx_product_name'::regclass;
-
--- Enable index
--- UPDATE pg_index SET indisready = true WHERE indexrelid = 'idx_product_name'::regclass;
-
--- 8.5 Rename Index
+sql
 ALTER INDEX idx_product_name RENAME TO idx_products_product_name;
+Q49: Why would you run ANALYZE products after creating indexes?
+To update statistics for the query optimizer, helping it decide whether to use the index.
 
--- 8.6 Analyze Index Statistics
--- Update statistics for query optimizer
-ANALYZE products;
+LEVEL 9: INDEX PERFORMANCE – QUESTIONS & SOLUTIONS
+Q50: What does EXPLAIN ANALYZE show? Write a command to analyze a query filtering employees by last_name = 'Smith'.
+It executes the query and shows the actual execution plan (operations, row counts, timings).
 
--- Show index statistics (PostgreSQL)
-SELECT * FROM pg_stat_user_indexes WHERE indexrelname = 'idx_product_name';
-
-
--- =========================================================
--- LEVEL 9: INDEX PERFORMANCE
--- =========================================================
-
--- 9.1 EXPLAIN Query Analysis
--- Check if index is being used (from your code)
+sql
 EXPLAIN ANALYZE SELECT * FROM employees WHERE last_name = 'Smith';
+Q51: Compare Seq Scan, Index Scan, and Index Only Scan – which is best and why?
 
--- Understanding EXPLAIN output:
-/*
-Seq Scan - Full table scan (bad for large tables)
-Index Scan - Using index (good)
-Index Only Scan - No table access needed (best)
-Bitmap Index Scan - Multiple indexes combined
-*/
+Seq Scan: full table scan (bad for large tables)
 
--- 9.2 Index Scan vs Seq Scan
--- Compare performance with and without index
+Index Scan: uses index to find rows (good)
 
--- Without index (might do Seq Scan)
-EXPLAIN ANALYZE SELECT * FROM employees WHERE last_name = 'Unknown';
+Index Only Scan: reads only the index, no table access (best, fastest)
 
--- With index (should do Index Scan)
-CREATE INDEX idx_lastname ON employees(last_name);
-EXPLAIN ANALYZE SELECT * FROM employees WHERE last_name = 'Smith';
+Q52: What is a covering index? Show an example query that could use an index‑only scan.
+A covering index includes all columns needed by the query.
 
--- 9.3 Index-Only Scan (Covering Index)
--- Create covering index for common query
-CREATE INDEX idx_employee_covering ON employees(last_name, first_name, department);
-
--- This query can use index-only scan (fastest)
-EXPLAIN ANALYZE 
+sql
+-- Index: CREATE INDEX idx_covering ON employees(last_name, first_name, department)
 SELECT last_name, first_name, department 
 FROM employees 
 WHERE last_name = 'Smith';
+Q53: Explain Bitmap Index Scan. Write two indexes that might cause it when filtering department = 'Sales' AND salary > 60000.
+Bitmap Index Scan combines multiple indexes using bitmaps.
 
--- 9.4 Bitmap Index Scan
--- When multiple indexes are combined
+sql
 CREATE INDEX idx_emp_dept ON employees(department);
 CREATE INDEX idx_emp_salary ON employees(salary);
+-- Query: SELECT * FROM employees WHERE department = 'Sales' AND salary > 60000;
+Q54: Why is the order of columns important in a composite index? Provide an example of good order vs. bad order.
+Columns should be ordered from most selective to least selective.
+Good: (salary, department) if salary has high cardinality.
+Bad: (department, salary) if department has low cardinality.
 
--- May use Bitmap Index Scan
-EXPLAIN ANALYZE 
-SELECT * FROM employees 
-WHERE department = 'Sales' AND salary > 60000;
+Q55: How can you monitor the size of an index in PostgreSQL?
 
--- 9.5 Index Condition Pushdown
--- Some conditions pushed to index level (MySQL)
-EXPLAIN SELECT * FROM employees 
-WHERE last_name LIKE 'S%' AND first_name LIKE 'J%';
-
--- 9.6 Multi-Column Index Order Importance
--- Good order: Most selective first
-CREATE INDEX idx_good_order ON employees(department, salary);
--- Use for: WHERE department = 'Sales' AND salary > 50000
-
--- Bad order: Least selective first
-CREATE INDEX idx_bad_order ON employees(salary, department);
--- Less efficient for same query
-
--- 9.7 Index Maintenance
--- Monitor index size
-SELECT 
-    schemaname,
-    tablename,
-    indexname,
-    pg_size_pretty(pg_relation_size(indexname::regclass)) AS index_size
+sql
+SELECT schemaname, tablename, indexname, pg_size_pretty(pg_relation_size(indexname::regclass)) AS index_size
 FROM pg_indexes
 WHERE tablename = 'employees';
+LEVEL 10: ADVANCED INDEX CONCEPTS – QUESTIONS & SOLUTIONS
+Q56: What is the difference between a clustered index and a non‑clustered index? How does a primary key relate to this?
+Clustered index determines physical order of data (one per table). Non‑clustered is a separate structure pointing to data (many per table). In MySQL/InnoDB, the primary key is the clustered index.
 
+Q57: Why should you create indexes on foreign key columns? Write indexes for orders(employee_id), order_details(order_id), and order_details(product_id).
+Foreign key indexes speed up JOINs and cascading operations.
 
--- =========================================================
--- LEVEL 10: ADVANCED INDEX CONCEPTS
--- =========================================================
-
--- 10.1 Clustered vs Non-Clustered Index
--- Clustered: Determines physical order of data (only one per table)
--- Primary key is usually clustered index (MySQL InnoDB)
-
--- Non-Clustered: Separate structure pointing to data (many per table)
--- Most indexes are non-clustered
-
--- 10.2 Primary Key as Clustered Index
--- Primary keys automatically create a unique clustered index
-ALTER TABLE products ADD PRIMARY KEY (product_id);
-
--- 10.3 Foreign Key Indexes
--- Always index foreign key columns (from your code)
+sql
 CREATE INDEX idx_order_employee ON orders(employee_id);
 CREATE INDEX idx_order_details_order ON order_details(order_id);
 CREATE INDEX idx_order_details_product ON order_details(product_id);
+Q58: How do you decide which column to put first in a composite index? (Hint: cardinality)
+Choose the column with higher cardinality (more distinct values) first.
 
--- 10.4 Composite Index Column Order
--- Rule: Most selective column first
--- Check cardinality (number of distinct values)
-SELECT 
-    COUNT(DISTINCT department) AS dept_cardinality,
-    COUNT(DISTINCT salary) AS salary_cardinality
-FROM employees;
+Q59: Create an index on LOWER(email) to support case‑insensitive email searches.
 
--- department has low cardinality (few distinct)
--- salary has high cardinality (many distinct)
--- So put salary first
-CREATE INDEX idx_emp_salary_dept ON employees(salary, department);
-
--- 10.5 Index on Expressions/Lowercase
--- Case-insensitive search index
+sql
 CREATE INDEX idx_emp_lower_email ON employees(LOWER(email));
+Q60: Can an index help find NULL values? Explain.
+Yes, most B-tree indexes include NULLs. A query like WHERE last_restock_date IS NULL can use the index.
 
--- Query using the expression index
-SELECT * FROM employees WHERE LOWER(email) = 'john.smith@company.com';
+LEVEL 11: PRACTICAL SCENARIOS – QUESTIONS & SOLUTIONS
+Q61: Create a view daily_sales_report that shows date, total orders, unique customers, total revenue, and average order value.
 
--- 10.6 Index with NULL values
--- Index includes NULLs (can be useful for finding NULLs)
-CREATE INDEX idx_nullable ON products(last_restock_date);
-
--- This can use the index
-SELECT * FROM products WHERE last_restock_date IS NULL;
-
--- 10.7 Index Skip Scan (MySQL 8.0+)
--- Allows skipping first column of composite index
--- For query: WHERE salary > 50000 (even if index is on (department, salary))
--- MySQL can skip the department part
-
-
--- =========================================================
--- LEVEL 11: PRACTICAL SCENARIOS
--- =========================================================
-
--- 11.1 Reporting Views
--- Create daily sales report view
+sql
 CREATE VIEW daily_sales_report AS
 SELECT 
     o.order_date,
@@ -726,22 +512,15 @@ FROM orders o
 JOIN order_details od ON o.order_id = od.order_id
 GROUP BY o.order_date
 ORDER BY o.order_date DESC;
+Q62: Write a security view employees_public that hides the salary column.
 
--- Use for reporting
-SELECT * FROM daily_sales_report WHERE order_date >= '2023-06-01';
-
--- 11.2 Security Views (Hide Sensitive Data)
--- Hide salary information from non-managers
+sql
 CREATE VIEW employees_public AS
 SELECT employee_id, first_name, last_name, department, email
 FROM employees;
+Q63: Create a view product_performance that groups by category and shows product count, times ordered, units sold, revenue, and average sale value.
 
--- Managers view with salary
-CREATE VIEW employees_manager AS
-SELECT * FROM employees;
-
--- 11.3 Aggregated Summary Views
--- Product performance dashboard
+sql
 CREATE VIEW product_performance AS
 SELECT 
     p.category,
@@ -753,151 +532,68 @@ SELECT
 FROM products p
 LEFT JOIN order_details od ON p.product_id = od.product_id
 GROUP BY p.category;
+Q64: You have a slow query SELECT * FROM orders WHERE customer_name = 'Acme Corp'. What index would you add to fix it?
 
--- 11.4 Performance Tuning with Indexes
--- Slow query without index
-EXPLAIN ANALYZE
-SELECT * FROM orders WHERE customer_name = 'Acme Corp';
-
--- Add index to fix
+sql
 CREATE INDEX idx_customer_name ON orders(customer_name);
+Q65: A query using ORDER BY last_restock_date DESC is slow. Write the index that would speed it up.
 
--- Now fast
-EXPLAIN ANALYZE
-SELECT * FROM orders WHERE customer_name = 'Acme Corp';
-
--- 11.5 Slow Query Optimization Example
--- Problem: Slow ORDER BY on non-indexed column
-EXPLAIN ANALYZE
-SELECT * FROM products ORDER BY last_restock_date DESC;
-
--- Solution: Create index on the column
+sql
 CREATE INDEX idx_restock_date ON products(last_restock_date DESC);
+Q66: Write the indexes needed to optimize a join between orders and employees on employee_id.
 
--- Query now uses index for sorting
-EXPLAIN ANALYZE
-SELECT * FROM products ORDER BY last_restock_date DESC;
-
--- 11.6 Join Optimization with Indexes
--- Ensure join columns are indexed
+sql
 CREATE INDEX idx_orders_employee ON orders(employee_id);
 CREATE INDEX idx_emp_id ON employees(employee_id);
+LEVEL 12: COMMON PITFALLS & BEST PRACTICES – QUESTIONS & SOLUTIONS
+Q67: What is over‑indexing? Why is it bad for write operations?
+Over‑indexing means creating indexes on every column. Each index slows INSERT/UPDATE/DELETE (by about 30% per index) and wastes disk space.
 
--- Now this join will be fast
-EXPLAIN ANALYZE
-SELECT o.order_id, e.first_name
-FROM orders o
-JOIN employees e ON o.employee_id = e.employee_id;
+Q68: How can you find indexes that are never used (PostgreSQL)?
 
-
--- =========================================================
--- LEVEL 12: COMMON PITFALLS & BEST PRACTICES
--- =========================================================
-
--- 12.1 Over-Indexing Problems
--- BAD: Indexing every column (wastes space, slows writes)
-CREATE INDEX idx1 ON products(product_name);
-CREATE INDEX idx2 ON products(category);
-CREATE INDEX idx3 ON products(price);
-CREATE INDEX idx4 ON products(stock_quantity);
-CREATE INDEX idx5 ON products(last_restock_date);
--- Too many indexes!
-
--- GOOD: Only index columns used in WHERE, JOIN, ORDER BY
-
--- 12.2 Unused Indexes
--- Find unused indexes (PostgreSQL)
+sql
 SELECT schemaname, tablename, indexname, idx_scan, idx_tup_read
 FROM pg_stat_user_indexes
-WHERE idx_scan = 0  -- Never used
+WHERE idx_scan = 0
 ORDER BY idx_tup_read;
+Q69: Why do views that nest other views cause performance problems?
+Each nested layer adds overhead; the database may materialize intermediate results. Flattening views or using materialized views is better.
 
--- Drop unused indexes
--- DROP INDEX unused_index_name;
+Q70: Give an example of a view that is not updatable (e.g., involves a JOIN) and explain why an UPDATE would fail.
 
--- 12.3 Index Maintenance Overhead
--- Each index slows INSERT/UPDATE/DELETE by ~30%
--- For high-write tables, minimize indexes
-
--- Example: Log table with mostly INSERTs
-CREATE TABLE audit_log (
-    log_id SERIAL PRIMARY KEY,
-    log_message TEXT,
-    created_at TIMESTAMP DEFAULT NOW()
-);
--- Only index created_at if needed for queries
-
--- 12.4 View Performance Issues
--- BAD: View with nested views
-CREATE VIEW v1 AS SELECT * FROM products;
-CREATE VIEW v2 AS SELECT * FROM v1;
-CREATE VIEW v3 AS SELECT * FROM v2;
--- Querying v3 is slow (multiple layers)
-
--- GOOD: Flatten views or use materialized views
-
--- 12.5 Nested View Performance
--- Instead of nested views, create a single view
-CREATE VIEW flattened_view AS
-SELECT * FROM products;  -- Direct access
-
--- 12.6 Updatable View Restrictions
--- This view is NOT updatable (has JOIN)
-CREATE VIEW order_details_view AS
-SELECT o.order_id, o.customer_name, p.product_name
+sql
+CREATE VIEW order_product_view AS
+SELECT o.order_id, p.product_name
 FROM orders o
 JOIN order_details od ON o.order_id = od.order_id
 JOIN products p ON od.product_id = p.product_id;
+UPDATE order_product_view SET customer_name = ... fails because the view spans multiple tables; the database doesn't know which table to update.
 
--- This UPDATE will FAIL
--- UPDATE order_details_view SET customer_name = 'New Name' WHERE order_id = 1;
+Q71: During a large update like UPDATE products SET price = price * 1.1, why might you temporarily drop indexes? What is the safe procedure?
+Indexes slow down bulk updates. Procedure:
 
--- 12.7 Index Blocking Writes
--- During large updates, consider dropping indexes temporarily
--- DROP INDEX idx_product_name;
--- UPDATE products SET price = price * 1.1;
--- CREATE INDEX idx_product_name ON products(product_name);
+sql
+DROP INDEX idx_product_name;
+UPDATE products SET price = price * 1.1;
+CREATE INDEX idx_product_name ON products(product_name);
+VIEWS & INDEXES QUICK REFERENCE – QUESTIONS & SOLUTIONS
+Q72: Write the shortest syntax to: create a basic view; replace an existing view; drop a view if it exists; create a basic index; drop an index.
 
+sql
+CREATE VIEW v AS SELECT ...;
+CREATE OR REPLACE VIEW v AS SELECT ...;
+DROP VIEW IF EXISTS v;
+CREATE INDEX i ON t(c);
+DROP INDEX i;
+Q73: What command shows the query plan without executing it?
 
--- =========================================================
--- VIEWS & INDEXES QUICK REFERENCE
--- =========================================================
+sql
+EXPLAIN SELECT ...;
+Q74: How do you list all indexes on a table in PostgreSQL? In MySQL?
+PostgreSQL: SELECT * FROM pg_indexes WHERE tablename = 'table';
+MySQL: SHOW INDEX FROM table_name;
 
--- === VIEWS ===
-CREATE VIEW view_name AS SELECT ...;              -- Create view
-CREATE OR REPLACE VIEW view_name AS ...;         -- Modify view
-DROP VIEW IF EXISTS view_name;                   -- Delete view
-CREATE TEMPORARY VIEW view_name AS ...;          -- Session-only view
-CREATE MATERIALIZED VIEW mv_name AS ...;         -- Stored view (PG)
-SELECT * FROM view_name;                         -- Query view
+Q75: Write a covering index (PostgreSQL syntax) that allows index-only scans for queries selecting col1, col2, and col3 with a filter on col1 and col2.
 
--- === INDEXES ===
-CREATE INDEX idx_name ON table(column);          -- Basic index
-CREATE UNIQUE INDEX idx_name ON table(column);   -- Unique constraint
-CREATE INDEX idx_name ON table(col1, col2);      -- Composite index
-CREATE INDEX idx_name ON table(column) WHERE condition;  -- Partial index
-CREATE INDEX idx_name ON table(LOWER(column));   -- Expression index
-DROP INDEX idx_name;                             -- Delete index
-ANALYZE table_name;                              -- Update statistics
-
--- === Performance Analysis ===
-EXPLAIN SELECT ...;                              -- See query plan
-EXPLAIN ANALYZE SELECT ...;                      -- Execute and analyze
-
--- === View Indexes ===
-SELECT * FROM pg_indexes WHERE tablename = 'table';  -- List indexes (PG)
-SHOW INDEX FROM table_name;                      -- List indexes (MySQL)
-
--- === Common Patterns ===
--- Covering index (index-only scan)
-CREATE INDEX idx_covering ON table(col1, col2) INCLUDE (col3);  -- PG
-
--- Conditional view
-CREATE VIEW active_orders AS
-SELECT * FROM orders WHERE status NOT IN ('Cancelled', 'Completed');
-
--- Security view (hide sensitive data)
-CREATE VIEW public_employee AS
-SELECT id, name, department FROM employees;  -- Excludes salary
-
-
+sql
+CREATE INDEX idx_covering ON table_name(col1, col2) INCLUDE (col3);
