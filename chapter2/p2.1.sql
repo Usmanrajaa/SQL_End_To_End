@@ -1,48 +1,47 @@
+-- ===================================================================
+-- PATTERN MATCHING, CASE EXPRESSIONS, SORTING, AND DISTINCT
+-- QUESTIONS & SOLUTIONS
+-- ===================================================================
+-- Each question is followed immediately by its SQL solution.
+-- ===================================================================
 
 -- ===================================================================
 -- PART 2: PATTERN MATCHING WITH LIKE
 -- ===================================================================
 
--- 2.1 Basic LIKE patterns
--- ----------------------------------------
--- Starts with 'J'
+-- Q1: How do you find employees whose first name starts with 'J'?
 SELECT * FROM employees 
 WHERE first_name LIKE 'J%';
 
--- Ends with 'son'
+-- Q2: How do you find employees whose last name ends with 'son'?
 SELECT * FROM employees 
 WHERE last_name LIKE '%son';
 
--- Contains 'son' anywhere
+-- Q3: How do you find employees whose last name contains 'son' anywhere?
 SELECT * FROM employees 
 WHERE last_name LIKE '%son%';
 
--- 2.2 Single character wildcard (_)
--- ----------------------------------------
--- Exactly one character before @
+-- Q4: How do you find employees whose email has exactly one character before '@company.com'?
 SELECT * FROM employees 
 WHERE email LIKE '_%@company.com';
 
--- Second letter is 'a'
+-- Q5: How do you find employees whose first name has second letter 'a'?
 SELECT * FROM employees 
 WHERE first_name LIKE '_a%';
 
--- Exactly 5-letter names
+-- Q6: How do you find employees with exactly 5-letter first names?
 SELECT * FROM employees 
 WHERE first_name LIKE '_____';
 
--- 2.3 NOT LIKE
--- ----------------------------------------
+-- Q7: How do you find employees whose first name does NOT start with 'J'?
 SELECT * FROM employees 
 WHERE first_name NOT LIKE 'J%';
 
--- 2.4 Complex LIKE patterns
--- ----------------------------------------
--- Names starting with J and ending with n
+-- Q8: How do you find employees whose first name starts with 'J' and ends with 'n'?
 SELECT * FROM employees 
 WHERE first_name LIKE 'J%n';
 
--- Email with dot before domain
+-- Q9: How do you find employees whose email contains a dot before the domain (e.g., @company.com)?
 SELECT * FROM employees 
 WHERE email LIKE '%.%@company.com';
 
@@ -50,100 +49,87 @@ WHERE email LIKE '%.%@company.com';
 -- PART 3: ADVANCED PATTERN MATCHING WITH REGEXP
 -- ===================================================================
 
--- 3.1 Basic REGEXP patterns
--- ----------------------------------------
--- Exact match (starts and ends)
+-- Q10: Using REGEXP, find employees whose first name is exactly 'John' (start and end).
 SELECT * FROM employees 
 WHERE first_name REGEXP '^John$';
 
--- Starts with J
+-- Q11: Using REGEXP, find employees whose first name starts with 'J'.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^J';
 
--- Ends with 'son'
+-- Q12: Using REGEXP, find employees whose last name ends with 'son'.
 SELECT * FROM employees 
 WHERE last_name REGEXP 'son$';
 
--- Contains 'ar'
+-- Q13: Using REGEXP, find employees whose first name contains 'ar'.
 SELECT * FROM employees 
 WHERE first_name REGEXP 'ar';
 
--- 3.2 Character classes and sets
--- ----------------------------------------
--- Any single character (.)
+-- Q14: Using REGEXP with dot (any single character), find employees whose first name starts with 'J' followed by any character then 'n' (e.g., Jan, Jon).
 SELECT * FROM employees 
 WHERE first_name REGEXP '^J.n';
 
--- Character set [abc]
+-- Q15: Using REGEXP character set [abc], find employees whose first name starts with A, B, or C.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[ABC]';
 
--- Not in set [^abc]
+-- Q16: Using REGEXP negated set [^abc], find employees whose first name does NOT start with A, B, or C.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[^ABC]';
 
--- Range [A-Z]
+-- Q17: Using REGEXP range [A-Z], find employees whose first name starts with any uppercase letter.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[A-Z]';
 
--- 3.3 Character type patterns
--- ----------------------------------------
--- Contains digits
+-- Q18: Using REGEXP digit class, find employees whose email contains a digit.
 SELECT * FROM employees 
 WHERE email REGEXP '[0-9]';
 
--- Only alphabets
+-- Q19: Using REGEXP, find employees whose first name contains only alphabetic characters (no spaces, digits, or punctuation).
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[A-Za-z]+$';
 
--- Only lowercase letters
+-- Q20: Using REGEXP, find employees whose first name contains only lowercase letters.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[a-z]+$';
 
--- Only uppercase letters
+-- Q21: Using REGEXP, find employees whose first name contains only uppercase letters.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^[A-Z]+$';
 
--- 3.4 Length-based patterns
--- ----------------------------------------
--- Exactly 5 letters
+-- Q22: Using REGEXP length pattern, find employees whose first name is exactly 5 characters long.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^.{5}$';
 
--- Between 3 to 6 characters
+-- Q23: Using REGEXP length pattern, find employees whose first name length is between 3 and 6 characters inclusive.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^.{3,6}$';
 
--- Minimum 3 characters
+-- Q24: Using REGEXP length pattern, find employees whose first name has at least 3 characters.
 SELECT * FROM employees 
 WHERE first_name REGEXP '^.{3,}$';
 
--- 3.5 OR and alternation
--- ----------------------------------------
--- Using OR (|)
+-- Q25: Using REGEXP alternation (|), find employees in Sales or IT department.
 SELECT * FROM employees 
 WHERE department REGEXP 'Sales|IT';
 
--- Multiple patterns
+-- Q26: Using REGEXP alternation, find employees whose first name is John, Jane, or Jim.
 SELECT * FROM employees 
 WHERE first_name REGEXP 'John|Jane|Jim';
 
--- 3.6 Word boundaries and special characters
--- ----------------------------------------
--- Word boundary (\b)
+-- Q27: Using REGEXP word boundary, find employees whose notes contain the exact word 'team' (not as part of another word).
 SELECT * FROM employees 
 WHERE notes REGEXP '\\bteam\\b';
 
--- Escape dot (.)
+-- Q28: Using REGEXP, find employees whose email ends with '.com' (escape the dot).
 SELECT * FROM employees 
 WHERE email REGEXP '\\.com$';
 
--- Escape backslash
+-- Q29: Using REGEXP, find employees whose notes contain a literal backslash.
 SELECT * FROM employees 
 WHERE notes REGEXP '\\\\';
 
--- 3.7 NOT REGEXP
--- ----------------------------------------
+-- Q30: Using NOT REGEXP, find employees whose first name does NOT start with 'J'.
 SELECT * FROM employees 
 WHERE first_name NOT REGEXP '^J';
 
@@ -151,16 +137,14 @@ WHERE first_name NOT REGEXP '^J';
 -- PART 4: COMBINED PATTERN MATCHING
 -- ===================================================================
 
--- 4.1 LIKE + REGEXP combinations
--- ----------------------------------------
+-- Q31: Combine LIKE and REGEXP: first name starts with 'J' AND email ends with '@company.com' AND department is Sales or IT.
 SELECT *
 FROM employees
 WHERE first_name LIKE 'J%'
   AND email REGEXP '@company\\.com$'
   AND department IN ('Sales', 'IT');
 
--- 4.2 Multiple pattern conditions
--- ----------------------------------------
+-- Q32: Combine multiple pattern conditions: first name starts with uppercase letter AND last name ends with 'son' OR email contains a digit.
 SELECT *
 FROM employees
 WHERE (first_name REGEXP '^[A-Z]' AND last_name LIKE '%son')
@@ -170,8 +154,7 @@ WHERE (first_name REGEXP '^[A-Z]' AND last_name LIKE '%son')
 -- PART 5: CASE EXPRESSIONS
 -- ===================================================================
 
--- 5.1 Simple CASE
--- ----------------------------------------
+-- Q33: Write a simple CASE statement to categorize salary into 'Low' (<50k), 'Medium' (50k-70k), 'High' (>70k).
 SELECT first_name, salary,
 CASE
     WHEN salary < 50000 THEN 'Low'
@@ -180,8 +163,7 @@ CASE
 END AS salary_category
 FROM employees;
 
--- 5.2 CASE with pattern matching
--- ----------------------------------------
+-- Q34: Use CASE with pattern matching to classify email types: '@company.com' as 'Official', '@gmail.com' as 'Personal', NULL as 'Missing', else 'Other'.
 SELECT first_name, email,
 CASE
     WHEN email LIKE '%@company.com' THEN 'Official'
@@ -191,8 +173,7 @@ CASE
 END AS email_type
 FROM employees;
 
--- 5.3 CASE in ORDER BY
--- ----------------------------------------
+-- Q35: Use CASE in ORDER BY to sort departments in custom order: Sales first, then Marketing, then HR, then IT, then others.
 SELECT *
 FROM employees
 ORDER BY 
@@ -204,8 +185,7 @@ CASE
     ELSE 5
 END;
 
--- 5.4 CASE in WHERE clause
--- ----------------------------------------
+-- Q36: Use CASE in WHERE clause to apply different salary thresholds per department: IT > 70k, Sales > 60k, all others > 50k.
 SELECT *
 FROM employees
 WHERE CASE 
@@ -218,23 +198,19 @@ END;
 -- PART 6: SORTING AND LIMITING
 -- ===================================================================
 
--- 6.1 Basic ORDER BY
--- ----------------------------------------
--- Ascending (default)
+-- Q37: Sort employees by salary in ascending order (default).
 SELECT * FROM employees
 ORDER BY salary ASC;
 
--- Descending
+-- Q38: Sort employees by salary in descending order.
 SELECT * FROM employees
 ORDER BY salary DESC;
 
--- Multiple columns
+-- Q39: Sort employees by department ascending, and within department by salary descending.
 SELECT * FROM employees
 ORDER BY department ASC, salary DESC;
 
--- 6.2 Custom sorting
--- ----------------------------------------
--- With CASE
+-- Q40: Sort employees using a custom order: IT first, then Sales, then others (using CASE).
 SELECT * FROM employees
 ORDER BY 
 CASE department
@@ -243,15 +219,13 @@ CASE department
     ELSE 3
 END;
 
--- 6.3 LIMIT and OFFSET
--- ----------------------------------------
--- Top 5 highest salaries
+-- Q41: Show the top 5 highest paid employees.
 SELECT *
 FROM employees
 ORDER BY salary DESC
 LIMIT 5;
 
--- Pagination (5 records per page)
+-- Q42: Implement pagination: show records 1-5 (page 1) and records 6-10 (page 2) using LIMIT and OFFSET.
 -- Page 1
 SELECT * FROM employees LIMIT 5 OFFSET 0;
 -- Page 2
@@ -261,23 +235,17 @@ SELECT * FROM employees LIMIT 5 OFFSET 5;
 -- PART 7: DISTINCT AND UNIQUE VALUES
 -- ===================================================================
 
--- 7.1 Basic DISTINCT
--- ----------------------------------------
+-- Q43: Show all unique department names from the employees table.
 SELECT DISTINCT department FROM employees;
 
--- Multiple columns
+-- Q44: Show unique combinations of department and job_title.
 SELECT DISTINCT department, job_title FROM employees;
-
-
-
-
 
 -- ===================================================================
 -- PART 8: COMPREHENSIVE EXAMPLES (INTERVIEW STYLE)
 -- ===================================================================
 
--- 8.1 Find high earners in IT department with specific name patterns
--- ----------------------------------------
+-- Q45: Find high earners in IT department with first name starting with letters A-M, official company email, sorted by salary, limit 10.
 SELECT first_name, last_name, salary, email
 FROM employees
 WHERE department = 'IT'
@@ -287,8 +255,7 @@ WHERE department = 'IT'
 ORDER BY salary DESC
 LIMIT 10;
 
--- 8.2 Categorize employees with multiple conditions
--- ----------------------------------------
+-- Q46: Categorize employees by salary level and email status, filtering hires after 2020-01-01, order by salary descending.
 SELECT 
     first_name,
     last_name,
@@ -308,8 +275,7 @@ FROM employees
 WHERE hire_date >= '2020-01-01'
 ORDER BY salary DESC;
 
--- 8.3 Pattern matching with multiple criteria
--- ----------------------------------------
+-- Q47: Complex pattern matching: first name starts with J or last name ends with son, email has no digits, department in IT, HR, Sales, custom order by department.
 SELECT *
 FROM employees
 WHERE (
@@ -326,3 +292,6 @@ ORDER BY
     END,
     last_name;
 
+-- ===================================================================
+-- END OF SCRIPT
+-- ===================================================================
