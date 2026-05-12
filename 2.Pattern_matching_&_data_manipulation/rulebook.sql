@@ -8,11 +8,13 @@
 -- 1. CORE CLAUSES
 -- SELECT, FROM, WHERE, ORDER BY
 
--- 2. FILTERING TECHNIQUES
+-- 2. DATA SHAPING OPERATIONS
+-- LIKE, LIMIT, DISTINCT
+
+-- 3. FILTERING TECHNIQUES
 -- =, >, <, !=, <>, BETWEEN, IN, NOT IN, AND, OR, IS NULL, IS NOT NULL
 
--- 3. DATA SHAPING OPERATIONS
--- LIKE, LIMIT, DISTINCT
+
 
 -- ===================================================================
 -- LIKE PATTERNS
