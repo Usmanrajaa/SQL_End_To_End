@@ -66,21 +66,6 @@ employee_contact bigint
 -- 11. SHOW TABLE STATUS
 -- 12. 
 
--- COLUMN LEVEL OPERATION
--- 1. SELECT * FROM TABLE_NAME
--- 2. INSERT INTO TABLE_NAME    VALUES ()
--- 3. SHOW COLUMNS FROM TABLE_NAME 
--- 5. ALTER TABLE TABLE_NAME
--- 5.0 DROP COLUMN COLUMN_NAME
--- 5.1 ADD C1 data_type constraints, ADD C2 data_type constraints,...    =>(where C1,C2,C3 Are columns name)
--- 5.2 RENAME COLUMN OLD_COLUMN_NAME TO NEW_COLUMN_NAME
--- 5.3 MODIFY COLUMN C2 VARCHAR(N);
--- 5.4 ADD PRIMARY KEY(C2)
--- 5.5 ADD CONSTRAINTS constraints_name(column_name)
--- 5.6 ADD COLUMN new_column_name first
--- 5.7 ADD COLUMN new_column_name after any_existing_column_name
--- 5.9 
-
 -- ROW LEVEL OPERATION
 -- 1. INSERT INTO TABLE_NAME 
 --    VALUES ()
@@ -109,6 +94,23 @@ employee_contact bigint
 --    END;
 -- 6. DELETE FROM TABLE 
 --    WHERE ANY_ROW_CONDITION
+
+-- COLUMN LEVEL OPERATION
+-- 1. SELECT * FROM TABLE_NAME
+-- 2. INSERT INTO TABLE_NAME    VALUES ()
+-- 3. SHOW COLUMNS FROM TABLE_NAME 
+-- 5. ALTER TABLE TABLE_NAME
+-- 5.0 DROP COLUMN COLUMN_NAME
+-- 5.1 ADD C1 data_type constraints, ADD C2 data_type constraints,...    =>(where C1,C2,C3 Are columns name)
+-- 5.2 RENAME COLUMN OLD_COLUMN_NAME TO NEW_COLUMN_NAME
+-- 5.3 MODIFY COLUMN C2 VARCHAR(N);
+-- 5.4 ADD PRIMARY KEY(C2)
+-- 5.5 ADD CONSTRAINTS constraints_name(column_name)
+-- 5.6 ADD COLUMN new_column_name first
+-- 5.7 ADD COLUMN new_column_name after any_existing_column_name
+-- 5.9 
+
+
 -- 7. 
 
 
